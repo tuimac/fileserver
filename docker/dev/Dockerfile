@@ -12,7 +12,8 @@ ADD entrypoint.sh /root/entrypoint.sh
 
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache bash git icu-dev ncurses icu-libs vim python3 python3-dev py3-pip nodejs npm curl tree nginx tzdata jq && \
+    apk add --no-cache bash git icu-dev ncurses icu-libs python3 python3-dev py3-pip nodejs npm curl tree nginx tzdata jq && \
+    apk add --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/v3.13/main vim~=8.2.4836-r0 && \
     cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
     echo "Asia/Tokyo" >  /etc/timezone && \
     apk del tzdata && \
