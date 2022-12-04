@@ -30,7 +30,6 @@ RUN apk update && \
     touch /var/log/gunicorn/access.log && \
     touch /var/log/gunicorn/error.log && \
     mkdir /var/log/fileserver && \
-    touch /var/log/fileserver/main.log && \
-    git clone https://github.com/tuimac/fileserver
+    touch /var/log/fileserver/main.log
 
 ENTRYPOINT ["/root/entrypoint.sh"]

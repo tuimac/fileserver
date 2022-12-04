@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BASE_DIR='/root'
-PJT_NAME='file_server'
+PJT_NAME='fileserver'
 
 cd $BASE_DIR
 if [ -e $PJT_NAME ]; then
