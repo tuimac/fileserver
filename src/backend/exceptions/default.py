@@ -1,3 +1,3 @@
-class MacAddressFormatException(Exception):
-    def __init__(self):
-        super().__init__('The delimiter of macaddress should be ":" or "-".')
+class ItemTypeError(Exception):
+    def __init__(self, message):
+        super().__init__(message)

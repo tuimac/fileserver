@@ -2,7 +2,7 @@ from rest_framework import views, status
 from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from utils.replyformat import ReplyFormat
-from utils import config 
+from utils import config
 import logging
 import traceback
 
@@ -14,7 +14,7 @@ class FileListAPIViews(views.APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            result =  self.kwargs.get('path')
+            result = ''
             return Response(
                 ReplyFormat.status_200(result),
                 status=status.HTTP_200_OK
