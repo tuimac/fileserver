@@ -1,18 +1,13 @@
 #!/bin/bash
 
-# Change variables below if you need
-##############################
-NAME="file_server"
-DOCKERHUBUSER="tuimac"
-IMAGE=${DOCKERHUBUSER}/${NAME}
-##############################
+NAME='fileserver'
 
 function runContainer(){
     docker build -t ${NAME} . --no-cache
     docker run -itd --name ${NAME} \
             -h ${NAME} \
-            -v $(pwd)/upload:/upload \
-            --net=host \
+            -v $(pwd)/${NAME}:/${NAME} \
+            -p 8080:80 \
             ${NAME}
 }
 

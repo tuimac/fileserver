@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.17.0
 
 WORKDIR /root
 
@@ -30,6 +30,7 @@ RUN apk update && \
     touch /var/log/gunicorn/access.log && \
     touch /var/log/gunicorn/error.log && \
     mkdir /var/log/fileserver && \
-    touch /var/log/fileserver/main.log
+    touch /var/log/fileserver/main.log && \
+    git clone https://github.com/fileserver
 
 ENTRYPOINT ["/root/entrypoint.sh"]
