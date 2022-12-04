@@ -201,5 +201,5 @@ REST_FRAMEWORK = {
 ASGI_APPLICATION = 'backend.asgi.application'
 
 f = open('/etc/fileserver/config.json')
-CONFIG_FILE = json.load(f)
+CONFIG = json.load(f)
 f.close
