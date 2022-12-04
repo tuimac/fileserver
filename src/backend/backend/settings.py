@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 import backend
+import json
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -138,19 +139,14 @@ LOGGING = {
     'disable_existing_loggers': True,
     'formatters': {
         'file': {
-            'format': '\n'.join([
-                '-' * 100,
-                '[%(levelname)s] - %(asctime)s\n',
-                'Source log file: %(pathname)s line: %(lineno)s\n',
-                '%(message)s'
-            ])
+            'format': '[%(levelname)s] - %(asctime)s - Source log file: %(pathname)s line: %(lineno)s %(message)s'
         },
     },
     'handlers': {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': "/var/log/django/django_info.log",
+            'filename': "/var/log/fileserver/main.log",
             'maxBytes': 1024 * 1024 * 10,
             'formatter': 'file'
         },
@@ -203,3 +199,7 @@ REST_FRAMEWORK = {
 }
 
 ASGI_APPLICATION = 'backend.asgi.application'
+
+f = open('/etc/fileserver/config.json')
+CONFIG_FILE = json.load(f)
+f.close

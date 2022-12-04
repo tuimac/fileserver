@@ -9,6 +9,7 @@ ADD requirements.txt /root/requirements.txt
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD gunicorn.conf.py /etc/gunicorn/gunicorn.conf.py
 ADD entrypoint.sh /root/entrypoint.sh
+ADD config.json /etc/fileserver/config.json
 
 RUN apk update && \
     apk upgrade && \
@@ -28,7 +29,7 @@ RUN apk update && \
     mkdir /var/log/gunicorn && \
     touch /var/log/gunicorn/access.log && \
     touch /var/log/gunicorn/error.log && \
-    mkdir /var/log/django && \
-    touch /var/log/django/django_info.log
+    mkdir /var/log/fileserver && \
+    touch /var/log/fileserver/main.log
 
 ENTRYPOINT ["/root/entrypoint.sh"]

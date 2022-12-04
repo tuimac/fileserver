@@ -14,7 +14,7 @@ class FileListAPIViews(views.APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            result = config.CONFIG_FILE
+            
             return Response(
                 ReplyFormat.status_200(result),
                 status=status.HTTP_200_OK
