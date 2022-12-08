@@ -13,13 +13,20 @@ class FileList extends React.Component {
     super(props);
     this.state = {
       files: '',
-      directories: ''
+      directories: '',
+      dir_path: '/'
     }
+    this.handleClick = this.handleClick.bind(this);
+    this.getFileListService = this.getFileListService.bind(this);
   }
 
   componentDidMount = async () => {
+    this.getFileListService();
+  }
+
+  getFileListService = async () => {
     try {
-      var result = await FileServerServices.getFileList('')
+      var result = await FileServerServices.getFileList(this.state.dir_path)
       this.setState({
         files: result.files,
         directories: result.directories
@@ -29,21 +36,31 @@ class FileList extends React.Component {
     }
   }
 
+  handleClick = async (path, type) => {
+    if(type === 'dir') {
+      await this.setState({ dir_path: this.state.dir_path + path + '/'})
+      this.getFileListService();
+    }
+  }
+
   render() {
     return(
       <>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
+          { this.state.dir_path }
+        </Box>
+        <Box sx={{ flexGrow: 1, pb: 1 }}>
           <List>
             { Object.keys(this.state.directories).map((index) => (
               <ListItem disablePadding key={ this.state.directories[index] }>
-                <ListItemButton>
+                <ListItemButton onClick={ (e) => this.handleClick(this.state.directories[index], 'dir') }>
                   <ListItemText primary={ this.state.directories[index] + '/' } />
                 </ListItemButton>
               </ListItem>
             ))}
             { Object.keys(this.state.files).map((index) => (
               <ListItem disablePadding key={ this.state.files[index] }>
-                <ListItemButton>
+                <ListItemButton onClick={ (e) => this.handleClick(this.state.files[index], 'file') }>
                   <ListItemText primary={ this.state.files[index] }/>
                 </ListItemButton>
               </ListItem>

@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider,  createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -42,7 +42,8 @@ class App extends React.Component {
           <BrowserRouter>
             <Box sx={{ px: 2 }}>
               <Routes>
-                <Route path="/" element={<FileList />} />
+                <Route path="/" element={<Navigate to="/filelist" />} />
+                <Route path="/filelist" element={<FileList />} />
                 <Route path="/upload" element={<FileUpload />} />
               </Routes>
             </Box>
