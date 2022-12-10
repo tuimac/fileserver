@@ -1,6 +1,9 @@
 FROM alpine:3.17.0
 
-WORKDIR /root
+ENV PJT_NAME=fileserver
+ENV WORK_DIR=/root
+
+WORKDIR $WORK_DIR
 
 EXPOSE 80
 EXPOSE 8000
@@ -30,6 +33,9 @@ RUN apk update && \
     touch /var/log/gunicorn/access.log && \
     touch /var/log/gunicorn/error.log && \
     mkdir /var/log/fileserver && \
-    touch /var/log/fileserver/main.log
+    touch /var/log/fileserver/main.log && \
+    git clone https://github.com/tuimac/${PJT_NAME} && \
+    cd $WORK_DIR/$PJT_NAME/src/frontend && \
+    npm ci
 
-ENTRYPOINT ["/root/entrypoint.sh"]
+ENTRYPOINT /root/entrypoint.sh ${PJT_NAME} ${WORK_DIR}

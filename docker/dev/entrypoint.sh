@@ -1,21 +1,33 @@
 #!/bin/bash
 
-BASE_DIR='/root'
-PJT_NAME='fileserver'
+function config_variable(){
+    if [ $# -ne 3 ]; then
+        echo 'Need the argument which are PJT_NAME and WORK_DIR.'
+        exit 1
+    fi
+    PJT_NAME=$1
+    WORK_DIR=$2
+}
 
-cd $BASE_DIR
-if [ -e $PJT_NAME ]; then
-    cd $PJT_NAME
-    git pull
-else
-    git clone https://github.com/tuimac/${PJT_NAME}
-fi
+function start_backend(){
+    cd ${WORK_DIR}/${PJT_NAME}/src/backend
+    python3 manage.py runserver 0:8000 &
+}
 
-cd ${BASE_DIR}/${PJT_NAME}/src/frontend
-npm ci
-npm start &
+function start_frontend(){
+    cd ${WORK_DIR}/${PJT_NAME}/src/frontend
+    npm start &
+}
 
-cd ${BASE_DIR}/${PJT_NAME}/src/backend
-python3 manage.py runserver 0:8000 &
+function start_nginx(){
+    /usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
+}
 
-/usr/sbin/nginx -g 'daemon off;' -c /etc/nginx/nginx.conf
+function main(){
+    start_backend
+    start_frontend
+    start_nginx
+}
+
+
+main $1 $2
