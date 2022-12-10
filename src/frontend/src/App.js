@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import HomeLayout from './layouts/HomeLayout';
 import FileList from './components/filelist/FileList';
 import FileUpload from './components/fileupload/FileUpload';
+import { FILELIST_PATH, UPLOAD_PATH } from './config/environment';
 
 const darkTheme = createTheme({
   palette: {
@@ -42,9 +43,9 @@ class App extends React.Component {
           <BrowserRouter>
             <Box sx={{ px: 2 }}>
               <Routes>
-                <Route path="/" element={<Navigate to="/filelist" />} />
-                <Route path="/filelist" element={<FileList />} />
-                <Route path="/upload" element={<FileUpload />} />
+                <Route path="/" element={<Navigate to={ FILELIST_PATH } />} />
+                <Route path={ FILELIST_PATH + '/*' } element={<FileList />} />
+                <Route path={ UPLOAD_PATH } element={<FileUpload />} />
               </Routes>
             </Box>
           </BrowserRouter>

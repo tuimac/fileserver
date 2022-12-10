@@ -4,8 +4,10 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import { useNavigate } from 'react-router-dom';
 
 import FileServerServices from '../../services/FileServerServices';
+import { FILELIST_PATH } from '../../config/environment';
 
 class FileList extends React.Component {
 
@@ -13,9 +15,9 @@ class FileList extends React.Component {
     super(props);
     this.state = {
       files: '',
-      directories: '',
-      dir_path: '/'
+      directories: ''
     }
+    this.navigate = useNavigate();
     this.handleClick = this.handleClick.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
   }
@@ -26,7 +28,9 @@ class FileList extends React.Component {
 
   getFileListService = async () => {
     try {
-      var result = await FileServerServices.getFileList(this.state.dir_path)
+      var result = await FileServerServices.getFileList(
+        window.location.pathname.replace(FILELIST_PATH, '')
+      )
       this.setState({
         files: result.files,
         directories: result.directories
@@ -38,8 +42,8 @@ class FileList extends React.Component {
 
   handleClick = async (path, type) => {
     if(type === 'dir') {
-      await this.setState({ dir_path: this.state.dir_path + path + '/'})
-      this.getFileListService();
+      console.log(FILELIST_PATH + '/' + path);
+      this.navigate(FILELIST_PATH + '/' + path);
     }
   }
 
@@ -47,14 +51,13 @@ class FileList extends React.Component {
     return(
       <>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-          { this.state.dir_path }
         </Box>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
           <List>
             { Object.keys(this.state.directories).map((index) => (
               <ListItem disablePadding key={ this.state.directories[index] }>
                 <ListItemButton onClick={ (e) => this.handleClick(this.state.directories[index], 'dir') }>
-                  <ListItemText primary={ this.state.directories[index] + '/' } />
+                  <ListItemText primary={ this.state.directories[index] + '/'} />
                 </ListItemButton>
               </ListItem>
             ))}
