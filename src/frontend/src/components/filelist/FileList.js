@@ -17,7 +17,6 @@ class FileList extends React.Component {
       files: '',
       directories: ''
     }
-    this.navigate = useNavigate();
     this.handleClick = this.handleClick.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
   }
@@ -43,7 +42,6 @@ class FileList extends React.Component {
   handleClick = async (path, type) => {
     if(type === 'dir') {
       console.log(FILELIST_PATH + '/' + path);
-      this.navigate(FILELIST_PATH + '/' + path);
     }
   }
 
