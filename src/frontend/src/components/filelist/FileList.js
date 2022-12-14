@@ -14,10 +14,11 @@ class FileList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      files: '',
-      directories: ''
+      files: [],
+      directories: [],
+      path: ''
     }
-    this.handleClick = this.handleClick.bind(this);
+    this.forwardDirectory = this.forwardDirectory.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
   }
 
@@ -27,8 +28,11 @@ class FileList extends React.Component {
 
   getFileListService = async () => {
     try {
+      await this.setState({
+        path: this.state.path + window.location.pathname.replace(FILELIST_PATH, '')
+      });
       var result = await FileServerServices.getFileList(
-        window.location.pathname.replace(FILELIST_PATH, '')
+        this.state.path
       )
       this.setState({
         files: result.files,
@@ -39,29 +43,38 @@ class FileList extends React.Component {
     }
   }
 
-  handleClick = async (path, type) => {
+  forwardDirectory = async (path, type) => {
     if(type === 'dir') {
-      console.log(FILELIST_PATH + '/' + path);
+      await this.setState({ path: this.state.path + '/' + path })
+      this.props.navigate(FILELIST_PATH  + this.state.path);
+      window.location.reload(false);
     }
+  }
+
+  backwardDirectory = async () => {
+    console.log('test');
   }
 
   render() {
     return(
       <>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-        </Box>
-        <Box sx={{ flexGrow: 1, pb: 1 }}>
           <List>
+            <ListItem disablePadding key='..'>
+              <ListItemButton onClick={ (e) => this.backwardDirectory() }>
+                <ListItemText primary='.. /' />
+              </ListItemButton>
+            </ListItem>
             { Object.keys(this.state.directories).map((index) => (
               <ListItem disablePadding key={ this.state.directories[index] }>
-                <ListItemButton onClick={ (e) => this.handleClick(this.state.directories[index], 'dir') }>
+                <ListItemButton onClick={ (e) => this.forwardDirectory(this.state.directories[index], 'dir') }>
                   <ListItemText primary={ this.state.directories[index] + '/'} />
                 </ListItemButton>
               </ListItem>
             ))}
             { Object.keys(this.state.files).map((index) => (
               <ListItem disablePadding key={ this.state.files[index] }>
-                <ListItemButton onClick={ (e) => this.handleClick(this.state.files[index], 'file') }>
+                <ListItemButton onClick={ (e) => this.forwardDirectory(this.state.files[index], 'file') }>
                   <ListItemText primary={ this.state.files[index] }/>
                 </ListItemButton>
               </ListItem>
@@ -73,4 +86,9 @@ class FileList extends React.Component {
   };
 }
 
-export default FileList;
+function PageRedirector(props) {
+  let navigate = useNavigate();
+  return <FileList {...props} navigate={ navigate } />
+}
+
+export default PageRedirector;

@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 
 import HomeLayout from './layouts/HomeLayout';
 import FileList from './components/filelist/FileList';
+import PageRedirector from './components/filelist/FileList';
 import FileUpload from './components/fileupload/FileUpload';
 import { FILELIST_PATH, UPLOAD_PATH } from './config/environment';
 
@@ -44,7 +45,7 @@ class App extends React.Component {
             <Box sx={{ px: 2 }}>
               <Routes>
                 <Route path="/" element={<Navigate to={ FILELIST_PATH } />} />
-                <Route path={ FILELIST_PATH + '/*' } element={<FileList />} />
+                <Route path={ FILELIST_PATH + '/*' } element={<PageRedirector />} />
                 <Route path={ UPLOAD_PATH } element={<FileUpload />} />
               </Routes>
             </Box>
