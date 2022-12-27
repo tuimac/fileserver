@@ -26,15 +26,19 @@ class FileList extends React.Component {
     this.getFileListService();
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if(prevProps !== this.props) {
+      this.getFileListService();
+    }
+  }
+
   getFileListService = async () => {
     try {
       await this.setState({
-        path: this.state.path + window.location.pathname.replace(FILELIST_PATH, '')
+        path: window.location.pathname.replace(FILELIST_PATH, '')
       });
-      var result = await FileServerServices.getFileList(
-        this.state.path
-      )
-      this.setState({
+      var result = await FileServerServices.getFileList(this.state.path);
+      await this.setState({
         files: result.files,
         directories: result.directories
       });
@@ -45,14 +49,19 @@ class FileList extends React.Component {
 
   forwardDirectory = async (path, type) => {
     if(type === 'dir') {
+      console.log(this.props);
       await this.setState({ path: this.state.path + '/' + path })
       this.props.navigate(FILELIST_PATH  + this.state.path);
-      window.location.reload(false);
+      await this.getFileListService();
     }
   }
 
   backwardDirectory = async () => {
-    console.log('test');
+    let path_list = this.state.path.split('/')
+    path_list.pop()
+    await this.setState({ path: path_list.join('/') })
+    this.props.navigate(FILELIST_PATH  + this.state.path);
+    await this.getFileListService();
   }
 
   render() {
