@@ -10,7 +10,7 @@ class FileServerServices {
         return res.data.result;
       })
       .catch((error) => {
-        return { message: error };
+        throw error;
       }
     );
   }

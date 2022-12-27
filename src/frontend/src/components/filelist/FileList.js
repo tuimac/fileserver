@@ -4,6 +4,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 
 import FileServerServices from '../../services/FileServerServices';
@@ -16,7 +17,8 @@ class FileList extends React.Component {
     this.state = {
       files: [],
       directories: [],
-      path: ''
+      path: '',
+      error_path: false
     }
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
@@ -43,7 +45,7 @@ class FileList extends React.Component {
         directories: result.directories
       });
     } catch(error) {
-      console.error(error);
+      await this.setState({ error_path: true });
     }
   }
 
