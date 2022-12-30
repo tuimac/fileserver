@@ -55,6 +55,8 @@ class FileList extends React.Component {
       await this.setState({ path: this.state.path + '/' + path })
       this.props.navigate(FILELIST_PATH  + this.state.path);
       await this.getFileListService();
+    } else if(type === 'file') {
+      
     }
   }
 
