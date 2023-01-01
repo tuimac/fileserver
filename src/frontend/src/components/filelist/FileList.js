@@ -101,8 +101,12 @@ class FileList extends React.Component {
           aria-describedby='modal-body'
         >
           <Box sx={{ ...preview_style }}>
-            <h2 id="modal-title">{ this.state.preview.title }</h2>
-            <pre id="modal-body">{ this.state.preview.body }</pre>
+            <Box>
+              <h2 id="modal-title">{ this.state.preview.title }</h2>
+            </Box>
+            <Box>
+              <pre id="modal-body">{ this.state.preview.body }</pre>
+            </Box>
           </Box>
         </Modal>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
