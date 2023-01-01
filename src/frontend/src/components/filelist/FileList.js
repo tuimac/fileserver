@@ -4,12 +4,12 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import { useNavigate } from 'react-router-dom';
 
 import FileServerServices from '../../services/FileServerServices';
 import { FILELIST_PATH } from '../../config/environment';
+import { preview_style } from '../../utils/Styles';
 
 class FileList extends React.Component {
 
@@ -74,16 +74,16 @@ class FileList extends React.Component {
 
   handlePreview = async (type, filename) => {
     if(type === 'close') {
-      let preview = {...this.state.preview};
+      let preview = this.state.preview;
       preview.open = false;
       await this.setState({ preview });
     } else {
-      let preview = {...this.state.preview};
+      let preview = this.state.preview;
       preview.open = true;
       preview.title = filename;
-      let file_info = await FileServerServices.getPreview(this.state.path);
+      let file_info = await FileServerServices.getFilePreview(this.state.path + '/' + filename);
       if(file_info.readable === false){
-        preview.body = 'This file is not readable.'
+        preview.body = 'This file is not readable.';
       } else {
         preview.body = file_info.content;
       }
@@ -96,11 +96,11 @@ class FileList extends React.Component {
       <>
         <Modal
           open={ this.state.preview.open }
-          onClose={ this.handlePreview('close', '') }
+          onClose={ (e) => this.handlePreview('close', '') }
           aria-labelledby='modal-title'
           aria-describedby='modal-body'
         >
-          <Box sx={{ width: 400, height:400 }}>
+          <Box sx={{ ...preview_style }}>
             <h2 id="modal-title">{ this.state.preview.title }</h2>
             <pre id="modal-body">{ this.state.preview.body }</pre>
           </Box>

@@ -26,7 +26,6 @@ class FileServerServices {
       }
     );
   }
-
 }
 
 export default FileServerServices;
