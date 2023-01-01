@@ -41,7 +41,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'utils',
     'exceptions',
-    'filelist'
+    'filelist',
+    'filedownload',
+    'filepreview'
 ]
 
 MIDDLEWARE = [

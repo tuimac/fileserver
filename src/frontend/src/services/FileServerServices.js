@@ -15,11 +15,11 @@ class FileServerServices {
     );
   }
 
-  static getFileObject(path) {
-    let url = API_URL + '/filelist' + path;
+  static getFilePreview(path) {
+    let url = API_URL + '/filepreview' + path;
     return axios.get(url).then((res) => 
       {
-        return res.data.result.blob();
+        return res.data.result;
       })
       .catch((error) => {
         throw error;
