@@ -1,4 +1,5 @@
 import axios from 'axios';
+import fileDownload from 'js-file-download';
 import { API_URL } from '../config/environment';
 
 class FileServerServices {
@@ -29,18 +30,10 @@ class FileServerServices {
 
   static downloadFile(path, filename) {
     let url = API_URL + '/filedownload' + path;
-    axios({
-      url: url,
-      method: 'GET',
-      responseType: 'blob'
-    }).then((res) => {
-      const url = window.URL.createObjectURL(new Blob([res.data]), { type: 'application/octet-stream'});
-      const link = document.createElement('a');
-      link.href = url;
-      console.log(filename);
-      link.setAttribute('download', filename);
-      document.body.appendChild(link);
-      link.click();
+    axios.get(url, {
+      responseType: 'blob',
+    }).then(res => {
+      fileDownload(res.data, filename);
     });
   }
 }
