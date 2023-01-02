@@ -16,13 +16,11 @@ class FileDownloadAPIViews(views.APIView):
 
     def get(self, request, *args, **kwargs):
         try:
-            if self.kwargs.get('path') == None:
-                result = ''
-            else:
-                file_path = os.path.join(CONFIG['root_directory'], self.kwargs.get('path'))
-                response = FileResponse(open(file_path, 'rb'))
-                response['content_type'] = "application/octet-stream"
-                response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
+            logger.info(self.kwargs.get('path'))
+            file_path = os.path.join(CONFIG['root_directory'], self.kwargs.get('path'))
+            response = FileResponse(open(file_path, 'rb'))
+            response['content_type'] = "application/octet-stream"
+            response['Content-Disposition'] = 'attachment; filename=' + os.path.basename(file_path)
             return response
         except:
             message = traceback.format_exc().splitlines()[-1]

@@ -26,6 +26,23 @@ class FileServerServices {
       }
     );
   }
+
+  static downloadFile(path, filename) {
+    let url = API_URL + '/filedownload' + path;
+    axios({
+      url: url,
+      method: 'GET',
+      responseType: 'blob'
+    }).then((res) => {
+      const url = window.URL.createObjectURL(new Blob([res.data]), { type: 'application/octet-stream'});
+      const link = document.createElement('a');
+      link.href = url;
+      console.log(filename);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+    });
+  }
 }
 
 export default FileServerServices;

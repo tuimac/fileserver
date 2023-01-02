@@ -39,7 +39,7 @@ class FileList extends React.Component {
     this.backwardDirectory = this.backwardDirectory.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
     this.handlePreview = this.handlePreview.bind(this);
-    this.copyToClipBoard = this.copyToClipBoard.bind(this);
+    this.downloadFile = this.downloadFile.bind(this);
   }
 
   componentDidMount = async () => {
@@ -100,12 +100,8 @@ class FileList extends React.Component {
     }
   }
 
-  copyToClipBoard(text) {
-    try {
-      navigator.clipboard.writeText(text);
-    } catch(error) {
-      console.log('When you access through HTTPS, you can use the clipboard copy.');
-    }
+  downloadFile = async () => {
+    await FileServerServices.downloadFile(this.state.path + '/' + this.state.preview.title, this.state.preview.title);
   }
 
   render() {
@@ -123,11 +119,8 @@ class FileList extends React.Component {
             </Grid>
             <Grid item>
               <DialogActions>
-                <IconButton color='primary' onClick={ (e) => this.handlePreview('close', '') }>
+                <IconButton color='primary' onClick={ (e) => this.downloadFile() }>
                   <DownloadIcon />
-                </IconButton>
-                <IconButton color='primary' onClick={ this.copyToClipBoard(this.state.preview.body) }>
-                  <ContentCopyIcon />
                 </IconButton>
               </DialogActions>
             </Grid>
