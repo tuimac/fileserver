@@ -1,10 +1,18 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Modal from '@mui/material/Modal';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate } from 'react-router-dom';
 
 import FileServerServices from '../../services/FileServerServices';
@@ -31,6 +39,7 @@ class FileList extends React.Component {
     this.backwardDirectory = this.backwardDirectory.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
     this.handlePreview = this.handlePreview.bind(this);
+    this.copyToClipBoard = this.copyToClipBoard.bind(this);
   }
 
   componentDidMount = async () => {
@@ -91,24 +100,45 @@ class FileList extends React.Component {
     }
   }
 
+  copyToClipBoard(text) {
+    try {
+      navigator.clipboard.writeText(text);
+    } catch(error) {
+      console.log('When you access through HTTPS, you can use the clipboard copy.');
+    }
+  }
+
   render() {
     return(
       <>
-        <Modal
+        <Dialog
           open={ this.state.preview.open }
           onClose={ (e) => this.handlePreview('close', '') }
-          aria-labelledby='modal-title'
+          maxWidth='sm'
           aria-describedby='modal-body'
         >
-          <Box sx={{ ...preview_style }}>
-            <Box>
-              <h2 id="modal-title">{ this.state.preview.title }</h2>
-            </Box>
-            <Box>
-              <pre id="modal-body">{ this.state.preview.body }</pre>
-            </Box>
-          </Box>
-        </Modal>
+          <Grid container direction='row' justifyContent='space-between' alignItems='center'>
+            <Grid item>
+              <DialogTitle>{ this.state.preview.title }</DialogTitle>
+            </Grid>
+            <Grid item>
+              <DialogActions>
+                <IconButton color='primary' onClick={ (e) => this.handlePreview('close', '') }>
+                  <DownloadIcon />
+                </IconButton>
+                <IconButton color='primary' onClick={ this.copyToClipBoard(this.state.preview.body) }>
+                  <ContentCopyIcon />
+                </IconButton>
+              </DialogActions>
+            </Grid>
+          </Grid>
+          <DialogContent dividers>
+            <pre id='modal-body'>{ this.state.preview.body }</pre>
+          </DialogContent>
+          <DialogActions style={{ justifyContent: "space-between" }}>
+            <Button onClick={ (e) => this.handlePreview('close', '') }>Close</Button>
+          </DialogActions>
+        </Dialog>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
           <List>
             <ListItem disablePadding key='..'>

@@ -20,6 +20,7 @@ const darkTheme = createTheme({
       styleOverrides: `
         ::-webkit-scrollbar {
             width: 8px;
+            height: 8px;
         },
         ::-webkit-scrollbar-thumb {
             background-color: #4682b4;
