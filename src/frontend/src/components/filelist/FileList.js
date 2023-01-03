@@ -14,6 +14,8 @@ import DialogActions from '@mui/material/DialogActions';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useNavigate } from 'react-router-dom';
+import { Resizable } from "react-resizable";
+import "react-resizable/css/styles.css";
 
 import FileServerServices from '../../services/FileServerServices';
 import { FILELIST_PATH } from '../../config/environment';
@@ -32,7 +34,9 @@ class FileList extends React.Component {
       preview: {
         open: false,
         title: '',
-        body: ''
+        body: '',
+        height: 400,
+        width: 600
       }
     }
     this.forwardDirectory = this.forwardDirectory.bind(this);
@@ -110,27 +114,50 @@ class FileList extends React.Component {
         <Dialog
           open={ this.state.preview.open }
           onClose={ (e) => this.handlePreview('close', '') }
-          maxWidth='sm'
-          aria-describedby='modal-body'
+          aria-labelledby='preview-title'
+          aria-describedby='preview-body'
+          fullScreen
+          PaperProps={{
+            sx: {
+              height: this.state.preview.height,
+              width: this.state.preview.width
+            }
+          }}
         >
-          <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-            <Grid item>
-              <DialogTitle>{ this.state.preview.title }</DialogTitle>
-            </Grid>
-            <Grid item>
-              <DialogActions>
-                <IconButton color='primary' onClick={ (e) => this.downloadFile() }>
-                  <DownloadIcon />
-                </IconButton>
+          <Resizable
+            height={ this.state.preview.height }
+            width={ this.state.preview.width }
+            onResize={(event, data) => {
+              this.setState(
+                { preview: { 
+                  ...this.state.preview,
+                  width: this.state.preview.width + event.movementX,
+                  height: this.state.preview.height + event.movementY
+                }}
+              );
+            }}
+          >
+            <>
+              <Grid container direction='row' justifyContent='space-between' alignItems='center'>
+                <Grid item>
+                  <DialogTitle id='preview-title'>{ this.state.preview.title }</DialogTitle>
+                </Grid>
+                <Grid item>
+                  <DialogActions>
+                    <IconButton color='primary' onClick={ (e) => this.downloadFile() }>
+                      <DownloadIcon />
+                    </IconButton>
+                  </DialogActions>
+                </Grid>
+              </Grid>
+              <DialogContent dividers>
+                <pre id='preview-body'>{ this.state.preview.body }</pre>
+              </DialogContent>
+              <DialogActions style={{ justifyContent: "space-between" }}>
+                <Button onClick={ (e) => this.handlePreview('close', '') }>Close</Button>
               </DialogActions>
-            </Grid>
-          </Grid>
-          <DialogContent dividers>
-            <pre id='modal-body'>{ this.state.preview.body }</pre>
-          </DialogContent>
-          <DialogActions style={{ justifyContent: "space-between" }}>
-            <Button onClick={ (e) => this.handlePreview('close', '') }>Close</Button>
-          </DialogActions>
+            </>
+          </Resizable>
         </Dialog>
         <Box sx={{ flexGrow: 1, pb: 1 }}>
           <List>
