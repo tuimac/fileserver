@@ -1,0 +1,87 @@
+version: 2.1
+jobs:
+  build:
+    machine:
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - run:
+          name: Install tools
+          command: |
+            sudo apt update
+            sudo apt install -y nodejs npm
+            sudo npm install n -g
+            sudo n stable
+            sudo apt purge -y nodejs npm
+      - run:
+          name: Build Frontend Application
+          working_directory: src/frontend
+          command: |
+            npm install
+            npm run build
+            cp -rp build /tmp/build
+      - store_artifacts:
+          path: /tmp/build
+          destination: front-artifact
+  test:
+    machine:
+      image: ubuntu-2004:202010-01
+    environment:
+      - FRONT_IMAGE: 'tuimac/fileserver'
+      - CI: ""
+    steps:
+      - run:
+          name: Start containers
+          working_directory: docker/prod
+          command: |
+            set -x
+      - run:
+          name: Integration test - Access landing page
+          command: |
+            for i in {0..10}; do
+              STATUS_CODE=$(curl -LI http://localhost -o /dev/null -w '%{http_code}\n' -s)
+              [[ $STATUS_CODE == '200' ]] && exit 0 
+              sleep 3
+            done
+            exit 1
+  create_image:
+    machine:
+      image: ubuntu-2204:current
+    environment:
+      - BUILDX: https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-amd64
+      - IMAGE: 'tuimac/fileserver'
+    steps:
+      - checkout
+      - run:
+          name: Create directory for Docker Buildx plugin binary
+          command: mkdir -vp ~/.docker/cli-plugins/
+      - run:
+          name: Login Docker Hub
+          command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      - run:
+          name: Download Buildx
+          command: curl --silent -L --output ~/.docker/cli-plugins/docker-buildx ${BUILDX}
+      - run:
+          name: Add permission to execute buildx
+          command: chmod a+x ~/.docker/cli-plugins/docker-buildx
+      - run:
+          name: Create docker driver
+          command: |
+            docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+            docker buildx create --name circleci
+            docker buildx use circleci
+      - run:
+          name: Build and Push docker image to Docker Hub
+          working_directory: builds
+          command: docker buildx build --platform linux/amd64,linux/arm64 -t ${IMAGE} --push .
+workflows:
+  version: 2.1
+  pipeline:
+    jobs:
+      - build:
+      - test:
+          requires:
+            - build
+      - create_image:
+          requires:
+            - test
