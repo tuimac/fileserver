@@ -1,4 +1,4 @@
-chdir = '/root/file_server/src/backend'
+chdir = '/root/fileserver/src/backend'
 wsgi_app = 'backend.wsgi:application'
 reload = True
 bind = 'unix:/run/gunicorn.sock'

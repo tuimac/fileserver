@@ -11,7 +11,7 @@ function config_variable(){
 
 function start_backend(){
     cd ${WORK_DIR}/${PJT_NAME}/src/backend
-    python3 manage.py runserver 0:8000 &
+    gunicorn backend.wsgi &
 }
 
 function start_frontend(){
