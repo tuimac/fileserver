@@ -11,5 +11,6 @@ access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"
 errorlog = '/var/log/gunicorn/error.log'
 loglevel = 'info'
 capture_output = True
-proc_name = 'file_server'
+proc_name = 'fileserver'
 pidfile = '/var/run/gunicorn.pid'
+bind = '0.0.0.0:8000'
