@@ -1,16 +1,16 @@
 #!/bin/bash
 
 function config_variable(){
-    if [ $# -ne 2 ]; then
+    if [ $# -ne 3 ]; then
         echo 'Need the argument which are PJT_NAME and WORK_DIR.'
         exit 1
     fi
-    BACKEND_DIR=$1
+    PJT_NAME=$1
+    WORK_DIR=$2
 }
 
 function start_backend(){
-    cd ${BACKEND_DIR}
-    python3 manage.py runserver 0:8000 &
+    gunicorn --config /etc/gunicorn/gunicorn.conf.py --chdir ${WORK_DIR}/${PJT_NAME}/src/backend &
 }
 
 function start_nginx(){
@@ -23,4 +23,4 @@ function main(){
 }
 
 
-main $1
+main $1 $2

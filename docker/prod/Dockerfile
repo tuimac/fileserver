@@ -21,7 +21,7 @@ RUN apk update && \
     touch /var/log/gunicorn/error.log && \
     mkdir /var/log/fileserver && \
 	touch /var/log/fileserver/main.log && \
-    echo $'\n\
+    echo '\n\
 echo -en "\e[1m\e[34m" \n\
 cat << "EOF" \n\
 \n\
