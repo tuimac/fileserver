@@ -18,6 +18,7 @@ import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 
 import FileServerServices from '../../services/FileServerServices';
+import Utils from '../../utils/Utils';
 import { FILELIST_PATH } from '../../config/environment';
 import { preview_style } from '../../utils/Styles';
 
@@ -28,7 +29,7 @@ class FileList extends React.Component {
     this.state = {
       files: [],
       directories: [],
-      path: '',
+      path: [],
       error_path: false,
       open_preview: false,
       preview: {
@@ -58,10 +59,9 @@ class FileList extends React.Component {
 
   getFileListService = async () => {
     try {
-      await this.setState({
-        path: window.location.pathname.replace(FILELIST_PATH, '')
-      });
-      var result = await FileServerServices.getFileList(this.state.path);
+      let file_path = Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/'));
+      await this.setState({ path: file_path });
+      var result = await FileServerServices.getFileList(this.state.path.join('/'));
       await this.setState({
         files: result.files,
         directories: result.directories
@@ -71,17 +71,19 @@ class FileList extends React.Component {
     }
   }
 
-  forwardDirectory = async (path) => {
-    await this.setState({ path: this.state.path + '/' + path })
-    this.props.navigate(FILELIST_PATH  + this.state.path);
+  forwardDirectory = async (next_path) => {
+    let tmp_path = this.state.path;
+    tmp_path.push(next_path);
+    await this.setState({ path: tmp_path })
+    this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
   }
 
   backwardDirectory = async () => {
-    let path_list = this.state.path.split('/')
-    path_list.pop()
-    await this.setState({ path: path_list.join('/') })
-    this.props.navigate(FILELIST_PATH  + this.state.path);
+    let tmp_path = this.state.path;
+    tmp_path.pop();
+    await this.setState({ path: tmp_path })
+    this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
   }
 

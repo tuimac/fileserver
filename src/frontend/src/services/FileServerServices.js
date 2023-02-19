@@ -5,7 +5,7 @@ import { API_URL } from '../config/environment';
 class FileServerServices {
 
   static getFileList(path) {
-    let url = API_URL + '/filelist' + path;
+    let url = API_URL + '/filelist/' + path;
     return axios.get(url).then((res) => 
       {
         return res.data.result;
@@ -17,7 +17,7 @@ class FileServerServices {
   }
 
   static getFilePreview(path) {
-    let url = API_URL + '/filepreview' + path;
+    let url = API_URL + '/filepreview/' + path;
     return axios.get(url).then((res) => 
       {
         return res.data.result;
@@ -29,7 +29,7 @@ class FileServerServices {
   }
 
   static downloadFile(path, filename) {
-    let url = API_URL + '/filedownload' + path;
+    let url = API_URL + '/filedownload/' + path;
     axios.get(url, {
       responseType: 'blob',
     }).then(res => {
