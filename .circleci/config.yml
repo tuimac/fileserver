@@ -59,7 +59,7 @@ workflows:
   version: 2.1
   pipeline:
     jobs:
-      - build:
+      - build
       - push_image:
           requires:
             - build
