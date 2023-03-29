@@ -3,6 +3,9 @@ jobs:
   build:
     machine:
       image: ubuntu-2204:current
+    environment:
+      - IMAGE_NAME: 'tuimac/fileserver'
+      - CONTAINER_NAME: fileserver
     steps:
       - checkout
       - run:
@@ -21,10 +24,16 @@ jobs:
             npm run build
             cp -rp build /tmp/build
       - run:
+          name: Build Docker
+          working_directory: docker/prod
+          command: |
+            docker build -t ${IMAGE_NAME} . --no-cache
+      - run:
           name: Start containers
           working_directory: docker/prod
           command: |
             set -x
+            docker run -itd --name ${CONTAINER_NAME} -p 80:80 ${IMAGE_NAME}
       - run:
           name: Integration test - Access landing page
           command: |
@@ -38,7 +47,7 @@ jobs:
     machine:
       image: ubuntu-2204:current
     environment:
-      - IMAGE: 'tuimac/fileserver'
+      - IMAGE_NAME: 'tuimac/fileserver'
       - DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
       - checkout
@@ -54,7 +63,7 @@ jobs:
       - run:
           name: Build and Push docker image
           command: |
-            docker buildx build --push --platform linux/ppc64le,linux/s390x,linux/arm64,linux/amd64 -t ${IMAGE} .
+            docker buildx build --push --platform linux/ppc64le,linux/s390x,linux/arm64,linux/amd64 -t ${IMAGE_NAME} .
 workflows:
   version: 2.1
   pipeline:
