@@ -28,7 +28,7 @@ class Preview extends React.Component {
   }
 
   openPreview = async (filename) => {
-    let file_info = await FileServerServices.getFilePreview(this.props.path + '/' + filename);
+    let file_info = await FileServerServices.getFilePreview(this.props.path.join('/') + filename);
     await this.setState({ 
       open: true,
       title: filename,
@@ -74,7 +74,7 @@ class Preview extends React.Component {
                 </Grid>
                 <Grid item>
                   <DialogActions>
-                    <IconButton color='primary' onClick={ (e) => FileServerServices.downloadFile(this.state.path + '/' + this.state.title, this.state.title) }>
+                    <IconButton color='primary' onClick={ (e) => FileServerServices.downloadFile(this.props.path + '/' + this.state.title, this.state.title) }>
                       <DownloadIcon />
                     </IconButton>
                   </DialogActions>

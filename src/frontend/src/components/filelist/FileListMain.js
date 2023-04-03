@@ -54,7 +54,7 @@ class FileListMain extends React.Component {
   forwardDirectory = async (next_path) => {
     let tmp_path = this.state.path;
     tmp_path.push(next_path);
-    await this.setState({ path: tmp_path })
+    await this.setState({ path: tmp_path });
     this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
   }
@@ -70,7 +70,7 @@ class FileListMain extends React.Component {
   render() {
     return(
       <>
-        <Preview path={ this.state.path } ref={instance => { this.child = instance }} />
+        <Preview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
           <List>
             <ListItem disablePadding key='..'>
