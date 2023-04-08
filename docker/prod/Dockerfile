@@ -8,7 +8,8 @@ ADD requirements.txt /root/requirements.txt
 ADD nginx.conf /etc/nginx/nginx.conf
 ADD gunicorn.conf.py /etc/gunicorn/gunicorn.conf.py
 ADD entrypoint.sh /root/entrypoint.sh
-ADD backend
+ADD backend/ /root/backend
+
 
 RUN apk update && \
     apk upgrade && \

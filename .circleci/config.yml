@@ -22,7 +22,13 @@ jobs:
           command: |
             npm install
             npm run build
-            cp -rp build /tmp/build
+            ls -l build
+            cp -r build ../../docker/prod/frontend
+      - run:
+          name: Build Backend Application
+          working_directory: src
+          command: |
+            cp -r backend ../docker/prod/
       - run:
           name: Build Docker
           working_directory: docker/prod
