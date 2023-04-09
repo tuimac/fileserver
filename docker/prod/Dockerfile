@@ -10,6 +10,7 @@ ADD gunicorn.conf.py /etc/gunicorn/gunicorn.conf.py
 ADD entrypoint.sh /root/entrypoint.sh
 ADD frontend/ /root/frontend
 ADD backend/ /root/backend
+ADD config.json /etc/fileserver/config.json
 
 RUN apk update && \
     apk upgrade && \
@@ -38,4 +39,4 @@ cat << "EOF" \n\
   \n\
 EOF' >> /root/.bashrc
 
-ENTRYPOINT ["/root/entrypoint.sh"]
+ENTRYPOINT /root/entrypoint.sh ${PJT_NAME} ${WORK_DIR}
