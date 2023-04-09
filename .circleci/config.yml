@@ -43,6 +43,7 @@ jobs:
       - run:
           name: Integration test - Access landing page
           command: |
+            docker ps -a
             for i in {0..10}; do
               STATUS_CODE=$(curl -LI http://localhost -o /dev/null -w '%{http_code}\n' -s)
               [[ $STATUS_CODE == '200' ]] && exit 0 
