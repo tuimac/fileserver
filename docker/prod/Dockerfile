@@ -1,8 +1,12 @@
 FROM alpine:latest
 
-WORKDIR /root
+ENV PJT_NAME=fileserver
+ENV WORK_DIR=/root
+
+WORKDIR $WORK_DIR
 
 EXPOSE 80
+EXPOSE 8000
 
 ADD requirements.txt /root/requirements.txt
 ADD nginx.conf /etc/nginx/nginx.conf
@@ -23,7 +27,7 @@ RUN apk update && \
     touch /var/log/gunicorn/access.log && \
     touch /var/log/gunicorn/error.log && \
     mkdir /var/log/fileserver && \
-	touch /var/log/fileserver/main.log && \
+	  touch /var/log/fileserver/main.log && \
     echo '\n\
 echo -en "\e[1m\e[34m" \n\
 cat << "EOF" \n\
