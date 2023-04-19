@@ -23,6 +23,7 @@ function start_nginx(){
 }
 
 function main(){
+    config_variable $1 $2
     start_backend
     start_frontend
     start_nginx
