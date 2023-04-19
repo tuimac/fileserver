@@ -6,7 +6,6 @@ ENV WORK_DIR=/root
 WORKDIR $WORK_DIR
 
 EXPOSE 80
-EXPOSE 8000
 
 ADD requirements.txt /root/requirements.txt
 ADD nginx.conf /etc/nginx/nginx.conf

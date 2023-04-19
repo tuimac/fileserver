@@ -3,7 +3,6 @@ FROM alpine:latest
 WORKDIR /root
 
 EXPOSE 80
-EXPOSE 8000
 
 ADD requirements.txt /root/requirements.txt
 ADD nginx.conf /etc/nginx/nginx.conf
