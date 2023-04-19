@@ -45,7 +45,10 @@ jobs:
           command: |
             docker ps -a
             docker logs ${CONTAINER_NAME}
-            for i in {0..10}; do
+            docker exec -it ${CONTAINER_NAME} ls -al /root
+            docker exec -it ${CONTAINER_NAME} ls -al /root/frontend
+            docker exec -it ${CONTAINER_NAME} ls -al /root/backend
+            for i in {0..20}; do
               STATUS_CODE=$(curl -LI http://localhost -o /dev/null -w '%{http_code}\n' -s)
               echo $STATUS_CODE
               [[ $STATUS_CODE == '200' ]] && exit 0 
