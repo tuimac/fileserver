@@ -43,13 +43,6 @@ jobs:
       - run:
           name: Integration test - Access landing page
           command: |
-            docker ps -a
-            docker logs ${CONTAINER_NAME}
-            docker exec -it ${CONTAINER_NAME} ls -al /root
-            docker exec -it ${CONTAINER_NAME} ls -al /root/frontend
-            docker exec -it ${CONTAINER_NAME} ls -al /root/backend
-            sleep 5
-            docker logs ${CONTAINER_NAME}
             for i in {0..20}; do
               STATUS_CODE=$(curl -LI http://localhost -o /dev/null -w '%{http_code}\n' -s)
               echo $STATUS_CODE
@@ -76,6 +69,7 @@ jobs:
             docker buildx create --use circleci
       - run:
           name: Build and Push docker image
+          working_directory: docker/prod
           command: |
             docker buildx build --push --platform linux/ppc64le,linux/s390x,linux/arm64,linux/amd64 -t ${IMAGE_NAME} .
 workflows:
