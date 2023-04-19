@@ -10,7 +10,7 @@ function config_variable(){
 }
 
 function start_backend(){
-    gunicorn --config /etc/gunicorn/gunicorn.conf.py --chdir ${WORK_DIR}/${PJT_NAME}/src/backend &
+    gunicorn --config /etc/gunicorn/gunicorn.conf.py --chdir /root/backend &
 }
 
 function start_nginx(){

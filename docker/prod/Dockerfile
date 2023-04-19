@@ -1,9 +1,6 @@
 FROM alpine:latest
 
-ENV PJT_NAME=fileserver
-ENV WORK_DIR=/root
-
-WORKDIR $WORK_DIR
+WORKDIR /root
 
 EXPOSE 80
 EXPOSE 8000
@@ -43,4 +40,4 @@ cat << "EOF" \n\
   \n\
 EOF' >> /root/.bashrc
 
-ENTRYPOINT /root/entrypoint.sh ${PJT_NAME} ${WORK_DIR}
+ENTRYPOINT /root/entrypoint.sh
