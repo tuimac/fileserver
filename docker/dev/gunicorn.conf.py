@@ -13,4 +13,3 @@ loglevel = 'info'
 capture_output = True
 proc_name = 'fileserver'
 pidfile = '/var/run/gunicorn.pid'
-bind = '0.0.0.0:8000'
