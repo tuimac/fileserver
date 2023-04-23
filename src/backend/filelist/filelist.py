@@ -30,7 +30,6 @@ class Filelist:
     def listitemsize(path) -> dict:
         def _get_dir_size(path) -> int:
             total_size = 0
-            logger.info(path)
             with os.scandir(path) as it:
                 for entry in it:
                     if entry.is_file():
@@ -41,7 +40,6 @@ class Filelist:
         size_info = {}
         path = re.sub('^/', '', path)
         path = os.path.join(CONFIG['root_directory'], path)
-        logger.info(path)
         for item in os.listdir(path):
             item_path = os.path.join(path, item)
             if os.path.isfile(item_path):

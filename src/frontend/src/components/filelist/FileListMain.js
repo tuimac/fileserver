@@ -29,7 +29,7 @@ class FileListMain extends React.Component {
     this.getItemSize = this.getItemSize.bind(this);
   }
 
-  componentDidMount = async () => {
+  componentDidMount = () => {
     this.getFileListService();
     this.getItemSize();
   }
@@ -54,9 +54,10 @@ class FileListMain extends React.Component {
     }
   }
 
-  getItemSize() {
+  getItemSize = async () => {
     try {
-      this.setState({ size: FileServerServices.getItemSize(this.state.path.join('/')) });
+      var size = await FileServerServices.getItemSize(this.state.path.join('/'));
+      this.setState({ size: size });
     } catch(error) {
       this.setState({ error_path: true });
     } 
@@ -69,7 +70,6 @@ class FileListMain extends React.Component {
     this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
     await this.getItemSize();
-    console.log(this.state.size);
   }
 
   backwardDirectory = async () => {
@@ -79,7 +79,6 @@ class FileListMain extends React.Component {
     this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
     await this.getItemSize();
-    console.log(this.state.size);
   }
 
   render() {
