@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function config_variable(){
-    if [ $# -ne 3 ]; then
+    if [ $# -ne 2 ]; then
         echo 'Need the argument which are PJT_NAME and WORK_DIR.'
         exit 1
     fi
