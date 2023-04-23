@@ -18,6 +18,7 @@ class FileListMain extends React.Component {
     this.state = {
       files: [],
       directories: [],
+      size: {},
       path: [],
       error_path: false,
       open_preview: false
@@ -25,10 +26,12 @@ class FileListMain extends React.Component {
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.backwardDirectory = this.backwardDirectory.bind(this);
     this.getFileListService = this.getFileListService.bind(this);
+    this.getItemSize = this.getItemSize.bind(this);
   }
 
   componentDidMount = async () => {
     this.getFileListService();
+    this.getItemSize();
   }
 
   componentDidUpdate(prevProps) {
@@ -51,12 +54,22 @@ class FileListMain extends React.Component {
     }
   }
 
+  getItemSize() {
+    try {
+      this.setState({ size: FileServerServices.getItemSize(this.state.path.join('/')) });
+    } catch(error) {
+      this.setState({ error_path: true });
+    } 
+  }
+
   forwardDirectory = async (next_path) => {
     let tmp_path = this.state.path;
     tmp_path.push(next_path);
     await this.setState({ path: tmp_path });
     this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
+    await this.getItemSize();
+    console.log(this.state.size);
   }
 
   backwardDirectory = async () => {
@@ -65,6 +78,8 @@ class FileListMain extends React.Component {
     await this.setState({ path: tmp_path })
     this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
     await this.getFileListService();
+    await this.getItemSize();
+    console.log(this.state.size);
   }
 
   render() {
@@ -83,6 +98,7 @@ class FileListMain extends React.Component {
                 <ListItemButton onClick={ (e) => this.forwardDirectory(this.state.directories[index]) }>
                   <ListItemText primary={ this.state.directories[index] + '/'} />
                 </ListItemButton>
+                <ListItemText primary={ this.state.size[this.state.directories[index]] } />
               </ListItem>
             ))}
             { Object.keys(this.state.files).map((index) => (
@@ -90,6 +106,7 @@ class FileListMain extends React.Component {
                 <ListItemButton onClick={ (e) => this.child.openPreview(this.state.files[index]) }>
                   <ListItemText primary={ this.state.files[index] }/>
                 </ListItemButton>
+                <ListItemText primary={ this.state.size[this.state.files[index]] } />
               </ListItem>
             ))}
           </List>
