@@ -29,3 +29,25 @@ class FileListAPIViews(views.APIView):
                 ReplyFormat.status_500(message),
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class FileListSizeAPIViews(views.APIView):
+
+    renderer_classes = [JSONRenderer]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            if self.kwargs.get('path') == None:
+                result = Filelist.listitemsize('')
+            else:
+                result = Filelist.listitemsize(self.kwargs.get('path'))
+            return Response(
+                ReplyFormat.status_200(result),
+                status=status.HTTP_200_OK
+            )
+        except:
+            message = traceback.format_exc().splitlines()[-1]
+            logger.error(traceback.format_exc())
+            return Response(
+                ReplyFormat.status_500(message),
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )

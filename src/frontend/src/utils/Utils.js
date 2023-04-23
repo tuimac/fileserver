@@ -1,6 +1,7 @@
 class Utils {
 
   static sanitize_url(file_path) {
+    console.log(file_path);
     for(var i = 0; i < file_path.length; i++){
       if(file_path[i] !== ''){
         break;
