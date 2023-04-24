@@ -50,6 +50,16 @@ jobs:
               sleep 3
             done
             exit 1
+      - run:
+          name: Create the package
+          command: |
+            mkdir package
+            cp -r src/frontend/build package/frontend
+            cp -r src/backend package/backend
+            zip -r ~/package.zip package/
+      - save_cache:
+          key: package-{{ checksum "package.zip" }}
+          paths: ~/package.zip
   push_image:
     machine:
       image: ubuntu-2204:current
@@ -58,6 +68,15 @@ jobs:
       - DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
       - checkout
+      - restore_cache:
+          key: package-{{ checksum "package.zip" }}
+          paths: ~/package.zip
+      - run:
+          name: Unpack the cache
+          command: |
+            unzip ~/package.zip
+            cp -r ~/package/frontend docker/prod/frontend
+            cp -r ~/package/backend docker/prod/backend
       - run:
           name: Login Docker Hub
           command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
@@ -70,8 +89,7 @@ jobs:
       - run:
           name: Build and Push docker image
           working_directory: docker/prod
-          command: |
-            docker buildx build --push --platform linux/ppc64le,linux/s390x,linux/arm64,linux/amd64 -t ${IMAGE_NAME} .
+          command: docker buildx build --push --platform linux/ppc64le,linux/s390x,linux/arm64,linux/amd64 -t ${IMAGE_NAME} .
 workflows:
   version: 2.1
   pipeline:
