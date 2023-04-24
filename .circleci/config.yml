@@ -75,8 +75,10 @@ jobs:
           name: Unpack the cache
           command: |
             unzip ~/package.zip
-            cp -r ~/package/frontend docker/prod/frontend
-            cp -r ~/package/backend docker/prod/backend
+            ls -al
+            ls -al ~
+            cp -r package/frontend docker/prod/frontend
+            cp -r package/backend docker/prod/backend
       - run:
           name: Login Docker Hub
           command: echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
