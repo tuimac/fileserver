@@ -74,7 +74,7 @@ class Preview extends React.Component {
                 </Grid>
                 <Grid item>
                   <DialogActions>
-                    <IconButton color='primary' onClick={ (e) => FileServerServices.downloadFile(this.props.path + '/' + this.state.title, this.state.title) }>
+                    <IconButton color='primary' onClick={ (e) => FileServerServices.downloadFile(this.props.path.join('/') + this.state.title, this.state.title) }>
                       <DownloadIcon />
                     </IconButton>
                   </DialogActions>
