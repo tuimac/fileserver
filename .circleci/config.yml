@@ -22,7 +22,6 @@ jobs:
           command: |
             npm install
             npm run build
-            ls -l build
             cp -r build ../../docker/prod/frontend
       - run:
           name: Build Backend Application
@@ -75,8 +74,6 @@ jobs:
           name: Unpack the cache
           command: |
             unzip ~/package.zip
-            ls -al
-            ls -al ~
             cp -r package/frontend docker/prod/frontend
             cp -r package/backend docker/prod/backend
       - run:
