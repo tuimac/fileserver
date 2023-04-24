@@ -58,7 +58,7 @@ jobs:
             cp -r src/backend package/backend
             zip -r ~/package.zip package/
       - save_cache:
-          key: package-{{ checksum "package.zip" }}
+          key: package-{{ checksum "~/package.zip" }}
           paths: ~/package.zip
   push_image:
     machine:
@@ -69,7 +69,7 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: package-{{ checksum "package.zip" }}
+          key: package-{{ checksum "~/package.zip" }}
           paths: ~/package.zip
       - run:
           name: Unpack the cache
