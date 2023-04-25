@@ -37,6 +37,7 @@ class FileListMain extends React.Component {
   componentDidUpdate(prevProps) {
     if(prevProps !== this.props) {
       this.getFileListService();
+      console.log('hell');
     }
   }
 
@@ -67,7 +68,7 @@ class FileListMain extends React.Component {
     let tmp_path = this.state.path;
     tmp_path.push(next_path);
     await this.setState({ path: tmp_path });
-    this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
+    this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
     await this.getFileListService();
     await this.getItemSize();
   }
@@ -76,7 +77,7 @@ class FileListMain extends React.Component {
     let tmp_path = this.state.path;
     tmp_path.pop();
     await this.setState({ path: tmp_path })
-    this.props.navigate(FILELIST_PATH + '/' + this.state.path.join('/'));
+    this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
     await this.getFileListService();
     await this.getItemSize();
   }

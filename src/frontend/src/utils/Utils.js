@@ -1,16 +1,21 @@
 class Utils {
 
   static sanitize_url(file_path) {
-    console.log(file_path);
-    for(var i = 0; i < file_path.length; i++){
-      if(file_path[i] !== ''){
-        break;
+    var index = 0;
+    while(index < file_path.length){
+      if(file_path[index] === ''){
+        file_path.splice(index, 1);
       } else {
-        file_path.shift();
+        ++index;
       }
     }
     return file_path;
   }
+
+  static join_path(base_path, additional_path) {
+    return base_path.replace('\/$', '') + '/' + additional_path;
+  }
+
 }
 
 export default Utils;
