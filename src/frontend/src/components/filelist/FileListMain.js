@@ -4,6 +4,13 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import "react-resizable/css/styles.css";
 
 import FileServerServices from '../../services/FileServerServices';
@@ -87,29 +94,32 @@ class FileListMain extends React.Component {
       <>
         <Preview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-          <List>
-            <ListItem disablePadding key='..'>
-              <ListItemButton onClick={ (e) => this.backwardDirectory() }>
-                <ListItemText primary='.. /' />
-              </ListItemButton>
-            </ListItem>
-            { Object.keys(this.state.directories).map((index) => (
-              <ListItem disablePadding key={ this.state.directories[index] }>
-                <ListItemButton onClick={ (e) => this.forwardDirectory(this.state.directories[index]) }>
-                  <ListItemText primary={ this.state.directories[index] + '/'} />
-                </ListItemButton>
-                <ListItemText primary={ this.state.size[this.state.directories[index]] } />
-              </ListItem>
-            ))}
-            { Object.keys(this.state.files).map((index) => (
-              <ListItem disablePadding key={ this.state.files[index] }>
-                <ListItemButton onClick={ (e) => this.child.openPreview(this.state.files[index]) }>
-                  <ListItemText primary={ this.state.files[index] }/>
-                </ListItemButton>
-                <ListItemText primary={ this.state.size[this.state.files[index]] } />
-              </ListItem>
-            ))}
-          </List>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>size</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow onClick={ (e) => this.backwardDirectory() } key='../'>
+                <TableCell>.. /</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+              { Object.keys(this.state.directories).map((index) => (
+                <TableRow onClick={ (e) => this.forwardDirectory(this.state.directories[index]) } key={ this.state.directories[index] + '/'}>
+                  <TableCell>{ this.state.directories[index] + '/'}</TableCell>
+                  <TableCell>{ this.state.size[this.state.directories[index]] }</TableCell>
+                </TableRow>
+              ))}
+              { Object.keys(this.state.files).map((index) => (
+                <TableRow  onClick={ (e) => this.child.openPreview(this.state.files[index]) } key={ this.state.files[index] }>
+                  <TableCell>{ this.state.files[index] }</TableCell>
+                  <TableCell>{ this.state.size[this.state.files[index]] }</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </Box>
       </>
     );
