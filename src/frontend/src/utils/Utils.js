@@ -13,7 +13,7 @@ class Utils {
   }
 
   static join_path(base_path, additional_path) {
-    return base_path.replace('\/$', '') + '/' + additional_path;
+    return base_path.replace('/$', '') + '/' + additional_path;
   }
 
 }

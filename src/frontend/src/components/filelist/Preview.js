@@ -11,6 +11,7 @@ import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
 
 import FileServerServices from '../../services/FileServerServices';
+import Utils from '../../utils/Utils';
 
 class Preview extends React.Component {
 
@@ -28,7 +29,7 @@ class Preview extends React.Component {
   }
 
   openPreview = async (filename) => {
-    let file_info = await FileServerServices.getFilePreview(this.props.path.join('/') + '/' + filename);
+    let file_info = await FileServerServices.getFilePreview(Utils.join_path(this.props.path.join('/'), filename));
     await this.setState({ 
       open: true,
       title: filename,

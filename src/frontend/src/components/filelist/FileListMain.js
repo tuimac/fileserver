@@ -1,14 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import "react-resizable/css/styles.css";
@@ -32,23 +26,21 @@ class FileListMain extends React.Component {
     }
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.backwardDirectory = this.backwardDirectory.bind(this);
-    this.getFileListService = this.getFileListService.bind(this);
-    this.getItemSize = this.getItemSize.bind(this);
+    this.getFileInfo = this.getFileInfo.bind(this);
   }
 
   componentDidMount = () => {
-    this.getFileListService();
-    this.getItemSize();
+    this.getFileInfo();
   }
 
   componentDidUpdate(prevProps) {
     if(prevProps !== this.props) {
-      this.getFileListService();
+      this.getFileInfo();
       console.log('hell');
     }
   }
 
-  getFileListService = async () => {
+  getFileInfo = async () => {
     try {
       let file_path = Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/'));
       await this.setState({ path: file_path });
@@ -57,18 +49,11 @@ class FileListMain extends React.Component {
         files: result.files,
         directories: result.directories
       });
-    } catch(error) {
-      await this.setState({ error_path: true });
-    }
-  }
-
-  getItemSize = async () => {
-    try {
       var size = await FileServerServices.getItemSize(this.state.path.join('/'));
       this.setState({ size: size });
     } catch(error) {
-      this.setState({ error_path: true });
-    } 
+      await this.setState({ error_path: true });
+    }
   }
 
   forwardDirectory = async (next_path) => {
@@ -76,8 +61,7 @@ class FileListMain extends React.Component {
     tmp_path.push(next_path);
     await this.setState({ path: tmp_path });
     this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
-    await this.getFileListService();
-    await this.getItemSize();
+    await this.getFileInfo();
   }
 
   backwardDirectory = async () => {
@@ -85,8 +69,7 @@ class FileListMain extends React.Component {
     tmp_path.pop();
     await this.setState({ path: tmp_path })
     this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
-    await this.getFileListService();
-    await this.getItemSize();
+    await this.getFileInfo();
   }
 
   render() {
@@ -94,26 +77,26 @@ class FileListMain extends React.Component {
       <>
         <Preview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-          <Table>
+          <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>size</TableCell>
+                <TableCell align="center">Name</TableCell>
+                <TableCell align="center">size</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow onClick={ (e) => this.backwardDirectory() } key='../'>
+              <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
                 <TableCell>.. /</TableCell>
                 <TableCell></TableCell>
               </TableRow>
               { Object.keys(this.state.directories).map((index) => (
-                <TableRow onClick={ (e) => this.forwardDirectory(this.state.directories[index]) } key={ this.state.directories[index] + '/'}>
+                <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.directories[index]) } key={ this.state.directories[index] + '/'}>
                   <TableCell>{ this.state.directories[index] + '/'}</TableCell>
                   <TableCell>{ this.state.size[this.state.directories[index]] }</TableCell>
                 </TableRow>
               ))}
               { Object.keys(this.state.files).map((index) => (
-                <TableRow  onClick={ (e) => this.child.openPreview(this.state.files[index]) } key={ this.state.files[index] }>
+                <TableRow hover onClick={ (e) => this.child.openPreview(this.state.files[index]) } key={ this.state.files[index] }>
                   <TableCell>{ this.state.files[index] }</TableCell>
                   <TableCell>{ this.state.size[this.state.files[index]] }</TableCell>
                 </TableRow>
