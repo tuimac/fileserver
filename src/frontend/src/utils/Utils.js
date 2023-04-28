@@ -16,6 +16,17 @@ class Utils {
     return base_path.replace('/$', '') + '/' + additional_path;
   }
 
+  static size_unit(size) {
+    if(size < 1024) {
+      return size + ' B';
+    } else if ( size >= 1024 && size < (1024 * 1024)) {
+      return (Math.floor((size / 1024) * Math.pow(10, 1) ) / Math.pow(10, 1)).toString() + ' KB';
+    } else if ( size >= (1024 * 1024) && size < (1024 * 1024 * 1024)) {
+      return (Math.floor((size / 1024 / 1024) * Math.pow(10, 1) ) / Math.pow(10, 1)).toString() + ' MB';
+    }
+
+  }
+
 }
 
 export default Utils;

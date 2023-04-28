@@ -92,13 +92,13 @@ class FileListMain extends React.Component {
               { Object.keys(this.state.directories).map((index) => (
                 <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.directories[index]) } key={ this.state.directories[index] + '/'}>
                   <TableCell>{ this.state.directories[index] + '/'}</TableCell>
-                  <TableCell>{ this.state.size[this.state.directories[index]] }</TableCell>
+                  <TableCell>{ Utils.size_unit(this.state.size[this.state.directories[index]]) }</TableCell>
                 </TableRow>
               ))}
               { Object.keys(this.state.files).map((index) => (
                 <TableRow hover onClick={ (e) => this.child.openPreview(this.state.files[index]) } key={ this.state.files[index] }>
                   <TableCell>{ this.state.files[index] }</TableCell>
-                  <TableCell>{ this.state.size[this.state.files[index]] }</TableCell>
+                  <TableCell>{ Utils.size_unit(this.state.size[this.state.files[index]]) }</TableCell>
                 </TableRow>
               ))}
             </TableBody>
