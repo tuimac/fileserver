@@ -13,7 +13,9 @@ class Utils {
   }
 
   static join_path(base_path, additional_path) {
-    return base_path.replace('/$', '') + '/' + additional_path;
+    console.log(base_path);
+    console.log(additional_path);
+    return base_path === '' ? additional_path : base_path.replace('/$', '') + '/' + additional_path;
   }
 
   static size_unit(size) {
@@ -24,7 +26,6 @@ class Utils {
     } else if ( size >= (1024 * 1024) && size < (1024 * 1024 * 1024)) {
       return (Math.floor((size / 1024 / 1024) * Math.pow(10, 1) ) / Math.pow(10, 1)).toString() + ' MB';
     }
-
   }
 
 }
