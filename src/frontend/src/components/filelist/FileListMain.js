@@ -1,16 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import "react-resizable/css/styles.css";
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
 import { FILELIST_PATH } from '../../config/environment';
-import Preview from './Preview';
-import { StyledTableCell } from './FileListStyles';
+import FileListPreview from './FileListPreview';
+import FileListTable from './FileListTable';
 
 class FileListMain extends React.Component {
 
@@ -22,7 +18,7 @@ class FileListMain extends React.Component {
       path: [],
       error_path: false,
       open_preview: false
-    }
+    };
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.backwardDirectory = this.backwardDirectory.bind(this);
     this.getFileInfo = this.getFileInfo.bind(this);
@@ -69,29 +65,9 @@ class FileListMain extends React.Component {
   render() {
     return(
       <>
-        <Preview path={ this.state.path } ref={ instance => { this.child = instance } } />
+        <FileListPreview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-        <Table stickyHeader aria-label="sticky table">
-          <TableHead>
-            <TableRow key='header'>
-            { Object.keys(this.state.items.column).map((index) => (
-              <StyledTableCell key={ this.state.items.column[index] }>{ this.state.items.column[index] }</StyledTableCell>
-            ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
-              <StyledTableCell>.. /</StyledTableCell>
-            </TableRow>
-            { Object.keys(this.state.items.row).map((index) => (
-              <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.items.row[index].name) } key={ index }>
-                { Object.values(this.state.items.row[index]).map((value) => (
-                  <StyledTableCell key={ value }>{ value }</StyledTableCell>
-                ))}
-              </TableRow>
-            ))}
-            </TableBody>
-          </Table>
+          <FileListTable items={ this.state.items }/>
         </Box>
       </>
     );
