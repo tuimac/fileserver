@@ -26,7 +26,7 @@ class FileListTable extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
+            <TableRow hover onClick={ (e) => this.backward() } key='../'>
               <StyledTableCell>.. /</StyledTableCell>
               <StyledTableCell></StyledTableCell>
               <StyledTableCell></StyledTableCell>
@@ -35,12 +35,12 @@ class FileListTable extends React.Component {
             </TableRow>
               { Object.keys(this.props.items.row).map((index) => (
                 this.props.items.row[index].type === 'directory'
-                ? <TableRow hover onClick={ (e) => this.forwardDirectory(this.props.items.row[index].name) } key={ index }>
+                ? <TableRow hover onClick={ (e) => this.props.forward(this.props.items.row[index].name) } key={ index }>
                     { Object.values(this.props.items.row[index]).map((value) => (
                       <StyledTableCell key={ value }>{ value }</StyledTableCell>
                     ))}
                   </TableRow>
-                : <TableRow hover onClick={ (e) => this.child.openPreview(this.props.items.row[index].name) } key={ index }>
+                : <TableRow hover onClick={ (e) => this.props.openPreview(this.props.items.row[index].name) } key={ index }>
                     { Object.values(this.props.items.row[index]).map((value) => (
                       <StyledTableCell key={ value }>{ value }</StyledTableCell>
                     ))}

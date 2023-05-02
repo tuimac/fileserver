@@ -67,7 +67,11 @@ class FileListMain extends React.Component {
       <>
         <FileListPreview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-          <FileListTable items={ this.state.items }/>
+          <FileListTable
+            items={ this.state.items }
+            forward={ this.forwardDirectory }
+            backward={ this.backwardDirectory }
+          />
         </Box>
       </>
     );
