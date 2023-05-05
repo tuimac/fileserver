@@ -20,8 +20,13 @@ class FileListMain extends React.Component {
       items: { row: [], column: [] },
       size: {},
       path: [],
-      error_path: false,
-      open_preview: false
+      column: {
+        'name': 'Name',
+        'owner': 'Owner',
+        'mtime': 'ModifiedTime',
+        'size': 'Size'
+      },
+      error: false,
     };
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.backwardDirectory = this.backwardDirectory.bind(this);
@@ -33,20 +38,19 @@ class FileListMain extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps !== this.state) {
+    if(prevProps !== this.props) {
       this.getFileInfo();
     }
   }
 
   getFileInfo = async () => {
     try {
-      let file_path = Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/'));
-      await this.setState({ path: file_path });
+      await this.setState({ path: Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/')) });
       await this.setState({ items: await FileServerServices.getFileList(this.state.path.join('/')) });
-      var size = await FileServerServices.getItemSize(this.state.path.join('/'));
-      this.setState({ size: size });
+      this.setState({ size: await FileServerServices.getItemSize(this.state.path.join('/')) });
     } catch(error) {
-      await this.setState({ error_path: true });
+      console.log(error);
+      this.setState({ error: true });
     }
   }
 
@@ -54,7 +58,7 @@ class FileListMain extends React.Component {
     let tmp_path = this.state.path;
     tmp_path.push(next_path);
     await this.setState({ path: tmp_path });
-    this.state.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
+    this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
     await this.getFileInfo();
   }
 
@@ -62,41 +66,43 @@ class FileListMain extends React.Component {
     let tmp_path = this.state.path;
     tmp_path.pop();
     await this.setState({ path: tmp_path })
-    this.state.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
+    this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
     await this.getFileInfo();
   }
 
   render() {
     return(
       <>
-        <FileListPreview path={ this.state.path } />
+        <FileListPreview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow key='header'>
-                { Object.keys(this.state.items.column).map((index) => (
-                  this.state.items.column[index] === 'type' ? '' : <StyledTableCell align='center' key={ this.state.items.column[index] }>{ this.state.items.column[index] }</StyledTableCell>
+                { Object.keys(this.state.column).map((index) => (
+                  <StyledTableCell align='center' key={ this.state.column[index] }>{ this.state.column[index] }</StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow hover onClick={ (e) => this.backward() } key='../'>
-                <StyledTableCell>.. /</StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
-                <StyledTableCell></StyledTableCell>
+              <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
+                { Object.keys(this.state.column).map((index) => (
+                  this.state.column[index] === 'Name'
+                  ? <StyledTableCell key={ '.. /' }>.. /</StyledTableCell>
+                  : <StyledTableCell key={ this.state.column[index] + index.toString() }></StyledTableCell>
+                ))}
               </TableRow>
-              { Object.keys(this.state.items.row).map((index) => (
-                this.state.items.row[index].type === 'directory'
-                ? <TableRow hover onClick={ (e) => this.state.forward(this.state.items.row[index].name) } key={ index }>
-                    { Object.values(this.state.items.row[index]).map((value) => (
-                      <StyledTableCell key={ value }>{ value }</StyledTableCell>
+              { Object.keys(this.state.items.row).map((row) => (
+                this.state.items.row[row].type === 'directory'
+                ? <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
+                    { Object.keys(this.state.column).map((column) => (
+                      column === 'name'
+                      ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] + '/' }</StyledTableCell>
+                      : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column]}</StyledTableCell>
                     ))}
                   </TableRow>
-                : <TableRow hover key={ index }>
-                    { Object.values(this.state.items.row[index]).map((value) => (
-                      <StyledTableCell key={ value }>{ value }</StyledTableCell>
+                : <TableRow hover onClick={ (e) => this.child.openPreview(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
+                    { Object.keys(this.state.column).map((column) => (
+                      <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
                     ))}
                   </TableRow>
               ))}
