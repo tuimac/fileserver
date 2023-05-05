@@ -31,6 +31,7 @@ class FileListMain extends React.Component {
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.backwardDirectory = this.backwardDirectory.bind(this);
     this.getFileInfo = this.getFileInfo.bind(this);
+    this.getFileSize = this.getFileSize.bind(this);
   }
 
   async componentDidMount() {
@@ -48,10 +49,16 @@ class FileListMain extends React.Component {
       await this.setState({ path: Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/')) });
       await this.setState({ items: await FileServerServices.getFileList(this.state.path.join('/')) });
       this.setState({ size: await FileServerServices.getItemSize(this.state.path.join('/')) });
+      this.getFileSize();
     } catch(error) {
       console.log(error);
       this.setState({ error: true });
     }
+  }
+
+  getFileSize = async () => {
+    var file_size = await FileServerServices.getItemSize(this.state.path.join('/'));
+    console.log(file_size);
   }
 
   forwardDirectory = async (next_path) => {
@@ -97,12 +104,16 @@ class FileListMain extends React.Component {
                     { Object.keys(this.state.column).map((column) => (
                       column === 'name'
                       ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] + '/' }</StyledTableCell>
-                      : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column]}</StyledTableCell>
+                      : column === 'mtime'
+                        ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
+                        : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
                     ))}
                   </TableRow>
                 : <TableRow hover onClick={ (e) => this.child.openPreview(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
                     { Object.keys(this.state.column).map((column) => (
-                      <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
+                      column === 'mtime'
+                      ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
+                      : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
                     ))}
                   </TableRow>
               ))}

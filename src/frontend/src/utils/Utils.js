@@ -27,9 +27,8 @@ class Utils {
   }
 
   static convert_to_datetime(unix_time) {
-    var date = new Date(unix_time);
-    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    return date.getFullYear() + '/' + months[date.getMonth()] + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+    var date = new Date(unix_time * 1000);
+    return date.getFullYear() + '/' + (date.getMonth() + 1).toString() + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
   }
 
 }
