@@ -69,7 +69,7 @@ class FileListMain extends React.Component {
   render() {
     return(
       <>
-        <FileListPreview path={ this.state.path } ref={ instance => { this.child = instance } } />
+        <FileListPreview path={ this.state.path } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
@@ -87,19 +87,19 @@ class FileListMain extends React.Component {
                 <StyledTableCell></StyledTableCell>
                 <StyledTableCell></StyledTableCell>
               </TableRow>
-                { Object.keys(this.state.items.row).map((index) => (
-                  this.state.items.row[index].type === 'directory'
-                  ? <TableRow hover onClick={ (e) => this.state.forward(this.state.items.row[index].name) } key={ index }>
-                      { Object.values(this.state.items.row[index]).map((value) => (
-                        <StyledTableCell key={ value }>{ value }</StyledTableCell>
-                      ))}
-                    </TableRow>
-                  : <TableRow hover onClick={ (e) => this.child.openPreview(this.state.items.row[index].name) } key={ index }>
-                      { Object.values(this.state.items.row[index]).map((value) => (
-                        <StyledTableCell key={ value }>{ value }</StyledTableCell>
-                      ))}
-                    </TableRow>
-                ))}
+              { Object.keys(this.state.items.row).map((index) => (
+                this.state.items.row[index].type === 'directory'
+                ? <TableRow hover onClick={ (e) => this.state.forward(this.state.items.row[index].name) } key={ index }>
+                    { Object.values(this.state.items.row[index]).map((value) => (
+                      <StyledTableCell key={ value }>{ value }</StyledTableCell>
+                    ))}
+                  </TableRow>
+                : <TableRow hover key={ index }>
+                    { Object.values(this.state.items.row[index]).map((value) => (
+                      <StyledTableCell key={ value }>{ value }</StyledTableCell>
+                    ))}
+                  </TableRow>
+              ))}
             </TableBody>
           </Table>
         </Box>
