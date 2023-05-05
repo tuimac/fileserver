@@ -1,12 +1,16 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import "react-resizable/css/styles.css";
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
 import { FILELIST_PATH } from '../../config/environment';
 import FileListPreview from './FileListPreview';
-import FileListTable from './FileListTable';
+import { StyledTableCell } from './FileListStyles';
 
 class FileListMain extends React.Component {
 
@@ -29,7 +33,7 @@ class FileListMain extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(prevProps !== this.props) {
+    if(prevProps !== this.state) {
       this.getFileInfo();
     }
   }
@@ -50,7 +54,7 @@ class FileListMain extends React.Component {
     let tmp_path = this.state.path;
     tmp_path.push(next_path);
     await this.setState({ path: tmp_path });
-    this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
+    this.state.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
     await this.getFileInfo();
   }
 
@@ -58,7 +62,7 @@ class FileListMain extends React.Component {
     let tmp_path = this.state.path;
     tmp_path.pop();
     await this.setState({ path: tmp_path })
-    this.props.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
+    this.state.navigate(Utils.join_path(FILELIST_PATH, this.state.path.join('/')));
     await this.getFileInfo();
   }
 
@@ -67,11 +71,37 @@ class FileListMain extends React.Component {
       <>
         <FileListPreview path={ this.state.path } ref={ instance => { this.child = instance } } />
         <Box sx={{ flexGrow: 1, pb: 1 }}>
-          <FileListTable
-            items={ this.state.items }
-            forward={ this.forwardDirectory }
-            backward={ this.backwardDirectory }
-          />
+          <Table stickyHeader aria-label="sticky table">
+            <TableHead>
+              <TableRow key='header'>
+                { Object.keys(this.state.items.column).map((index) => (
+                  this.state.items.column[index] === 'type' ? '' : <StyledTableCell align='center' key={ this.state.items.column[index] }>{ this.state.items.column[index] }</StyledTableCell>
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow hover onClick={ (e) => this.backward() } key='../'>
+                <StyledTableCell>.. /</StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+                <StyledTableCell></StyledTableCell>
+              </TableRow>
+                { Object.keys(this.state.items.row).map((index) => (
+                  this.state.items.row[index].type === 'directory'
+                  ? <TableRow hover onClick={ (e) => this.state.forward(this.state.items.row[index].name) } key={ index }>
+                      { Object.values(this.state.items.row[index]).map((value) => (
+                        <StyledTableCell key={ value }>{ value }</StyledTableCell>
+                      ))}
+                    </TableRow>
+                  : <TableRow hover onClick={ (e) => this.child.openPreview(this.state.items.row[index].name) } key={ index }>
+                      { Object.values(this.state.items.row[index]).map((value) => (
+                        <StyledTableCell key={ value }>{ value }</StyledTableCell>
+                      ))}
+                    </TableRow>
+                ))}
+            </TableBody>
+          </Table>
         </Box>
       </>
     );
