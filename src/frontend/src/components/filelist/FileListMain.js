@@ -58,7 +58,15 @@ class FileListMain extends React.Component {
 
   getFileSize = async () => {
     var file_size = await FileServerServices.getItemSize(this.state.path.join('/'));
-    console.log(file_size);
+    var tmp_items = this.state.items.row
+    for(var file_name in file_size) {
+      // eslint-disable-next-line no-loop-func
+      let tmp_item_index = tmp_items.findIndex(({name}) => name === file_name);
+      let tmp_item = tmp_items[tmp_item_index];
+      tmp_item.size = Utils.size_unit(file_size[file_name]);
+      tmp_items[tmp_item_index] = tmp_item;
+    }
+    this.setState({ items: { row : tmp_items }});
   }
 
   forwardDirectory = async (next_path) => {
