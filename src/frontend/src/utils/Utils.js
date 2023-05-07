@@ -28,7 +28,7 @@ class Utils {
 
   static convert_to_datetime(unix_time) {
     var date = new Date(unix_time * 1000);
-    return date.getFullYear() + '/' + (date.getMonth() + 1).toString() + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes();
+    return date.getFullYear() + '/' + (date.getMonth() + 1).toString().padStart(2, '0') + '/' + date.getDate().toString().padStart(2, '0') + ' ' + date.getHours().toString().padStart(2, '0') + ':' + date.getMinutes().toString().padStart(2, '0');
   }
 
 }

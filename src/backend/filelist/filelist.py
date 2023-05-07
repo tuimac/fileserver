@@ -13,7 +13,7 @@ class Filelist:
 
     @staticmethod
     def listitems(path) -> dict:
-        item_data = { 'row': [], 'column': []}
+        item_data = { 'row': [], 'column': [], 'root_path': CONFIG['root_directory'] }
         path = os.path.join(CONFIG['root_directory'], path)
         with os.scandir(path) as item_list:
             for item in item_list:

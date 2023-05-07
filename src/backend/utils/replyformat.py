@@ -8,9 +8,9 @@ class ReplyFormat:
         }
 
     @staticmethod
-    def status_400(message: str) -> dict:
+    def status_404(message: str) -> dict:
         return {
-            'status_code': 400,
+            'status_code': 404,
             'message': message
         }
 

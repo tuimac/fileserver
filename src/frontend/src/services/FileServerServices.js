@@ -48,6 +48,23 @@ class FileServerServices {
       fileDownload(res.data, filename);
     });
   }
+
+  static uploadFile(path, filename, data) {
+    let url = API_URL + '/fileupload/' + path;
+    axios.post(url, data, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        'File-Name': filename
+      }
+    }).then((res) => 
+    {
+      return res.data.result;
+    })
+    .catch((error) => {
+      throw error;
+    });
+  }
+
 }
 
 export default FileServerServices;

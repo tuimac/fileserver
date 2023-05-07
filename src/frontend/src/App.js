@@ -40,9 +40,9 @@ class App extends React.Component {
           <BrowserRouter>
             <Box sx={{ px: 2 }}>
               <Routes>
-                <Route path="/" element={<Navigate to={ FILELIST_PATH } />} />
-                <Route path={ FILELIST_PATH + '/*' } element={<FileList />} />
-                <Route path={ UPLOAD_PATH } element={<FileUpload />} />
+                <Route path="/" element={ <Navigate to={ FILELIST_PATH } /> } />
+                <Route path={ FILELIST_PATH + '/*' } element={ <FileList /> } />
+                <Route path={ UPLOAD_PATH } element={ <FileUpload /> } />
               </Routes>
             </Box>
           </BrowserRouter>

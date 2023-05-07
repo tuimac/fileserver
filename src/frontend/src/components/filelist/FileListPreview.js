@@ -23,7 +23,7 @@ class Preview extends React.Component {
       body: '',
       height: 400,
       width: 600
-    }
+    };
     this.openPreview = this.openPreview.bind(this);
     this.closePreview = this.closePreview.bind(this);
   }

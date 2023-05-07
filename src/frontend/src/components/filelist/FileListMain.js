@@ -1,5 +1,7 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
@@ -10,14 +12,17 @@ import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
 import { FILELIST_PATH } from '../../config/environment';
 import FileListPreview from './FileListPreview';
+import FileUploadPreview from './FileUploadPreview';
 import { StyledTableCell } from './FileListStyles';
+import { Button } from '@mui/material';
+
 
 class FileListMain extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      items: { row: [], column: [] },
+      items: { row: [], column: [], root_path: '' },
       size: {},
       path: [],
       column: {
@@ -26,7 +31,7 @@ class FileListMain extends React.Component {
         'mtime': 'ModifiedTime',
         'size': 'Size'
       },
-      error: false,
+      error: false
     };
     this.forwardDirectory = this.forwardDirectory.bind(this);
     this.backwardDirectory = this.backwardDirectory.bind(this);
@@ -48,7 +53,6 @@ class FileListMain extends React.Component {
     try {
       await this.setState({ path: Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/')) });
       await this.setState({ items: await FileServerServices.getFileList(this.state.path.join('/')) });
-      this.setState({ size: await FileServerServices.getItemSize(this.state.path.join('/')) });
       this.getFileSize();
     } catch(error) {
       console.log(error);
@@ -88,45 +92,58 @@ class FileListMain extends React.Component {
   render() {
     return(
       <>
-        <FileListPreview path={ this.state.path } ref={ instance => { this.child = instance } } />
-        <Box sx={{ flexGrow: 1, pb: 1 }}>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow key='header'>
-                { Object.keys(this.state.column).map((index) => (
-                  <StyledTableCell align='center' key={ this.state.column[index] }>{ this.state.column[index] }</StyledTableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
-                { Object.keys(this.state.column).map((index) => (
-                  this.state.column[index] === 'Name'
-                  ? <StyledTableCell key={ '.. /' }>.. /</StyledTableCell>
-                  : <StyledTableCell key={ this.state.column[index] + index.toString() }></StyledTableCell>
-                ))}
-              </TableRow>
-              { Object.keys(this.state.items.row).map((row) => (
-                this.state.items.row[row].type === 'directory'
-                ? <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
-                    { Object.keys(this.state.column).map((column) => (
-                      column === 'name'
-                      ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] + '/' }</StyledTableCell>
-                      : column === 'mtime'
+        <FileListPreview path={ this.state.path } ref={ instance => { this.listpreview = instance } } />
+        <FileUploadPreview open={ false } ref={ instance => { this.uploadpreview = instance } }></FileUploadPreview>
+        <Grid container direction='row' justifyContent='space-between' alignItems='center' sx={{ flexGrow: 1, pb: 2 }}>
+          <Grid item>
+            <Box>
+            </Box>
+          </Grid>
+          <Grid item>
+            <Button  variant="contained" color="success" onClick={ (e) => this.uploadpreview.openPreview() }>File Upload</Button>
+          </Grid>
+        </Grid>
+        
+        <Box sx={{ flexGrow: 1, pb: 2 }}>
+          <TableContainer sx={{ maxHeight: window.innerHeight * 0.75 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow key='header'>
+                  { Object.keys(this.state.column).map((index) => (
+                    <StyledTableCell align='center' key={ this.state.column[index] }>{ this.state.column[index] }</StyledTableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
+                  { Object.keys(this.state.column).map((index) => (
+                    this.state.column[index] === 'Name'
+                    ? <StyledTableCell key={ '.. /' }>.. /</StyledTableCell>
+                    : <StyledTableCell key={ this.state.column[index] + index.toString() }></StyledTableCell>
+                  ))}
+                </TableRow>
+                { Object.keys(this.state.items.row).map((row) => (
+                  this.state.items.row[row].type === 'directory'
+                  ? <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
+                      { Object.keys(this.state.column).map((column) => (
+                        column === 'name'
+                        ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] + '/' }</StyledTableCell>
+                        : column === 'mtime'
+                          ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
+                          : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
+                      ))}
+                    </TableRow>
+                  : <TableRow hover onClick={ (e) => this.listpreview.openPreview(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
+                      { Object.keys(this.state.column).map((column) => (
+                        column === 'mtime'
                         ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
                         : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
-                    ))}
-                  </TableRow>
-                : <TableRow hover onClick={ (e) => this.child.openPreview(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
-                    { Object.keys(this.state.column).map((column) => (
-                      column === 'mtime'
-                      ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
-                      : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
-                    ))}
-                  </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+                      ))}
+                    </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Box>
       </>
     );
