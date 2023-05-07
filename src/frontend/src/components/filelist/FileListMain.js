@@ -100,7 +100,7 @@ class FileListMain extends React.Component {
             </Box>
           </Grid>
           <Grid item>
-            <Button  variant="contained" color="success" onClick={ (e) => this.uploadpreview.openPreview() }>File Upload</Button>
+            <Button variant="contained" color="success" onClick={ (e) => this.uploadpreview.openPreview() }>File Upload</Button>
           </Grid>
         </Grid>
         
