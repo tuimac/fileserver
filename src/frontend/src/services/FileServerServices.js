@@ -54,7 +54,7 @@ class FileServerServices {
     axios.post(url, data, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        'File-Name': filename
+        'File-Name': encodeURIComponent(filename)
       }
     }).then((res) => 
     {

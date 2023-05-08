@@ -15,6 +15,7 @@ class FileUploadAPIViews(views.APIView):
     def post(self, request, *args, **kwargs):
         try:
             fd = request.data['file']
+            logger.info(request)
             if self.kwargs.get('path') == None:
                 Fileupload.writefile('', request.headers['File-Name'], fd)
             else:

@@ -1,18 +1,21 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import TableContainer from '@mui/material/TableContainer';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import "react-resizable/css/styles.css";
+
+import {
+  Box,
+  Grid,
+  TableContainer,
+  Table,
+  TableBody,
+  TableHead,
+  TableRow
+} from '@mui/material';
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
 import { FILELIST_PATH } from '../../config/environment';
 import FileListPreview from './FileListPreview';
-import FileUploadPreview from './FileUploadPreview';
+import FileUploadPreview from '../fileupload/FileUploadPreview';
 import { StyledTableCell } from './FileListStyles';
 import { Button } from '@mui/material';
 
@@ -93,7 +96,12 @@ class FileListMain extends React.Component {
     return(
       <>
         <FileListPreview path={ this.state.path } ref={ instance => { this.listpreview = instance } } />
-        <FileUploadPreview open={ false } ref={ instance => { this.uploadpreview = instance } }></FileUploadPreview>
+        <FileUploadPreview
+          path={ this.state.path }
+          forwardDirectory={ this.forwardDirectory }
+          open={ false }
+          ref={ instance => { this.uploadpreview = instance } }
+        />
         <Grid container direction='row' justifyContent='space-between' alignItems='center' sx={{ flexGrow: 1, pb: 2 }}>
           <Grid item>
             <Box>
@@ -127,7 +135,7 @@ class FileListMain extends React.Component {
                   ? <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
                       { Object.keys(this.state.column).map((column) => (
                         column === 'name'
-                        ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] + '/' }</StyledTableCell>
+                        ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ decodeURIComponent(this.state.items.row[row][column] + '/') }</StyledTableCell>
                         : column === 'mtime'
                           ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
                           : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
@@ -137,7 +145,7 @@ class FileListMain extends React.Component {
                       { Object.keys(this.state.column).map((column) => (
                         column === 'mtime'
                         ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
-                        : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
+                        : <StyledTableCell key={ this.state.items.row[row].name + column }>{ decodeURIComponent(this.state.items.row[row][column]) }</StyledTableCell>
                       ))}
                     </TableRow>
                 ))}

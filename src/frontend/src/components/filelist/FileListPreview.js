@@ -1,14 +1,18 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import DownloadIcon from '@mui/icons-material/Download';
-import { Resizable } from "react-resizable";
 import "react-resizable/css/styles.css";
+import { Resizable } from "react-resizable";
+
+import {
+  Button,
+  IconButton,
+  Grid,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  DialogContent
+} from '@mui/material';
+
+import DownloadIcon from '@mui/icons-material/Download';
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
