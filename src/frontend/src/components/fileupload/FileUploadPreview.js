@@ -15,8 +15,6 @@ import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import FileUploadList from './FileUploadList';
 import FileServerServices from '../../services/FileServerServices';
-import Utils from '../../utils/Utils';
-import { FILELIST_PATH } from '../../config/environment';
 
 class FileUploadPreview extends React.Component {
 
@@ -47,13 +45,15 @@ class FileUploadPreview extends React.Component {
     this.setState({ files: upload_file });
   }
 
-  uploadFile() {
+  uploadFile = async (event) => {
+    event.preventDefault();
+    let data = new FormData();
     for(let index in Object.keys(this.state.files)) {
-      let data = new FormData();
-      data.append('file', this.state.files[index]);
-      FileServerServices.uploadFile(this.props.path.join('/'), this.state.files[index].name, data);
+      data.append(this.state.files[index].name, this.state.files[index]);
     }
-    this.props.forwardDirectory(this.props.path.join('/'));
+    await FileServerServices.uploadFile(this.props.path.join('/'), this.state.files, data);
+    await this.props.forwardDirectory(this.props.path.join('/'));
+    this.closePreview();
   }
 
   render() {
@@ -74,8 +74,7 @@ class FileUploadPreview extends React.Component {
           <DialogTitle id='preview-title'>Upload</DialogTitle>
           <DialogContent dividers>
             { this.state.files.length === 0
-              ?
-                <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+              ? <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
                   <Grid container direction='column' justifyContent='center' alignItems='center'>
                     <Grid item>
                       <IconButton color="primary" aria-label="upload picture" component="label">
@@ -98,7 +97,7 @@ class FileUploadPreview extends React.Component {
           </DialogContent>
           <DialogActions style={{ justifyContent: "space-between" }}>
             <Button onClick={ (e) => this.closePreview() }>Close</Button>
-            <Button variant='contained' color='success' onClick={ (e) => this.uploadFile() }>Upload</Button>
+            <Button variant='contained' color='success' onClick={ (e) => this.uploadFile(e) }>Upload</Button>
           </DialogActions>
         </Dialog>
       </>

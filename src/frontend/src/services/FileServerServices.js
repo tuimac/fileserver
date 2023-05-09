@@ -53,8 +53,7 @@ class FileServerServices {
     let url = API_URL + '/fileupload/' + path;
     axios.post(url, data, {
       headers: {
-        'Content-Type': 'multipart/form-data',
-        'File-Name': encodeURIComponent(filename)
+        'Content-Type': 'multipart/form-data'
       }
     }).then((res) => 
     {

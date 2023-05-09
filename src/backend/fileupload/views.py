@@ -14,12 +14,11 @@ class FileUploadAPIViews(views.APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            fd = request.data['file']
-            logger.info(request)
-            if self.kwargs.get('path') == None:
-                Fileupload.writefile('', request.headers['File-Name'], fd)
-            else:
-                Fileupload.writefile(self.kwargs.get('path'), request.headers['File-Name'], fd)
+            for filename in request.data:
+                if self.kwargs.get('path') == None:
+                    Fileupload.writefile('', filename, request.data[filename])
+                else:
+                    Fileupload.writefile(self.kwargs.get('path'), filename, request.data[filename])
             return Response(
                 ReplyFormat.status_200('uploaded'),
                 status=status.HTTP_200_OK
