@@ -17,7 +17,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
 
-class Preview extends React.Component {
+class FileListPreview extends React.Component {
 
   constructor(props) {
     super(props);
@@ -33,6 +33,7 @@ class Preview extends React.Component {
   }
 
   openPreview = async (filename) => {
+    console.log(this.props.path);
     let file_info = await FileServerServices.getFilePreview(Utils.join_path(this.props.path.join('/'), filename));
     await this.setState({ 
       open: true,
@@ -99,4 +100,4 @@ class Preview extends React.Component {
   };
 }
 
-export default Preview;
+export default FileListPreview;

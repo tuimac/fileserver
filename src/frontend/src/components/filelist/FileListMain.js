@@ -3,22 +3,15 @@ import "react-resizable/css/styles.css";
 
 import {
   Box,
-  Grid,
-  TableContainer,
-  Table,
-  TableBody,
-  TableHead,
-  TableRow
+  Button,
+  Grid
 } from '@mui/material';
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
 import { FILELIST_PATH } from '../../config/environment';
-import FileListPreview from './FileListPreview';
 import FileUploadPreview from '../fileupload/FileUploadPreview';
-import { StyledTableCell } from './FileListStyles';
-import { Button } from '@mui/material';
-
+import FileListTable from './FileListTable';
 
 class FileListMain extends React.Component {
 
@@ -28,18 +21,12 @@ class FileListMain extends React.Component {
       items: { row: [], column: [], root_path: '' },
       size: {},
       path: [],
-      column: {
-        'name': 'Name',
-        'owner': 'Owner',
-        'mtime': 'ModifiedTime',
-        'size': 'Size'
-      },
       error: false
     };
-    this.forwardDirectory = this.forwardDirectory.bind(this);
-    this.backwardDirectory = this.backwardDirectory.bind(this);
     this.getFileInfo = this.getFileInfo.bind(this);
     this.getFileSize = this.getFileSize.bind(this);
+    this.forwardDirectory = this.forwardDirectory.bind(this);
+    this.backwardDirectory = this.backwardDirectory.bind(this);
   }
 
   async componentDidMount() {
@@ -95,7 +82,6 @@ class FileListMain extends React.Component {
   render() {
     return(
       <>
-        <FileListPreview path={ this.state.path } ref={ instance => { this.listpreview = instance } } />
         <FileUploadPreview
           path={ this.state.path }
           forwardDirectory={ this.forwardDirectory }
@@ -113,45 +99,13 @@ class FileListMain extends React.Component {
         </Grid>
         
         <Box sx={{ flexGrow: 1, pb: 2 }}>
-          <TableContainer sx={{ maxHeight: window.innerHeight * 0.75 }}>
-            <Table stickyHeader aria-label="sticky table">
-              <TableHead>
-                <TableRow key='header'>
-                  { Object.keys(this.state.column).map((index) => (
-                    <StyledTableCell align='center' key={ this.state.column[index] }>{ this.state.column[index] }</StyledTableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                <TableRow hover onClick={ (e) => this.backwardDirectory() } key='../'>
-                  { Object.keys(this.state.column).map((index) => (
-                    this.state.column[index] === 'Name'
-                    ? <StyledTableCell key={ '.. /' }>.. /</StyledTableCell>
-                    : <StyledTableCell key={ this.state.column[index] + index.toString() }></StyledTableCell>
-                  ))}
-                </TableRow>
-                { Object.keys(this.state.items.row).map((row) => (
-                  this.state.items.row[row].type === 'directory'
-                  ? <TableRow hover onClick={ (e) => this.forwardDirectory(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
-                      { Object.keys(this.state.column).map((column) => (
-                        column === 'name'
-                        ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ decodeURIComponent(this.state.items.row[row][column] + '/') }</StyledTableCell>
-                        : column === 'mtime'
-                          ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
-                          : <StyledTableCell key={ this.state.items.row[row].name + column }>{ this.state.items.row[row][column] }</StyledTableCell>
-                      ))}
-                    </TableRow>
-                  : <TableRow hover onClick={ (e) => this.listpreview.openPreview(this.state.items.row[row].name) } key={ this.state.items.row[row].name }>
-                      { Object.keys(this.state.column).map((column) => (
-                        column === 'mtime'
-                        ? <StyledTableCell key={ this.state.items.row[row].name + column }>{ Utils.convert_to_datetime(this.state.items.row[row][column]) }</StyledTableCell>
-                        : <StyledTableCell key={ this.state.items.row[row].name + column }>{ decodeURIComponent(this.state.items.row[row][column]) }</StyledTableCell>
-                      ))}
-                    </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <FileListTable
+            items={ this.state.items }
+            path={ this.state.path }
+            getFileInfo={ this.getFileInfo }
+            forwardDirectory={ this.forwardDirectory }
+            backwardDirectory={ this.backwardDirectory }
+          />
         </Box>
       </>
     );

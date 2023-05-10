@@ -82,7 +82,7 @@ class FileUploadPreview extends React.Component {
                         <input hidden multiple accept="*" type="file" onChange={(e) => this.selectFiles(e.target.files) }/>
                       </IconButton>
                     </Grid>
-                    <Grid item>
+                    <Grid item> 
                       <Typography variant="subtitle1" gutterBottom>Drag or Click here</Typography>
                     </Grid>
                   </Grid>
