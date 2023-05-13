@@ -1,4 +1,6 @@
-# Web File Server
+[![CircleCI](https://circleci.com/gh/tuimac/fileserver.svg?style=shield)](https://circleci.com/gh/tuimac/fileserver)
+
+# Simple Web File Server
 This is the simple file server through the browser.
 
 ## How to use
