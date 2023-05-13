@@ -19,8 +19,8 @@ class FileListMain extends React.Component {
     super(props);
     this.state = {
       items: { row: [], column: [], root_path: '' },
-      size: {},
       path: [],
+      check_list: {},
       error: false
     };
     this.getFileInfo = this.getFileInfo.bind(this);
@@ -31,6 +31,9 @@ class FileListMain extends React.Component {
 
   async componentDidMount() {
     await this.getFileInfo();
+    let tmp_checked_list = {};
+    this.state.items.row.forEach((item) => tmp_checked_list[item.name] = false);
+    await this.setState({ checked_list: tmp_checked_list });
   }
 
   componentDidUpdate(prevProps) {

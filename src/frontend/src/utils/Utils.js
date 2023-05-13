@@ -23,6 +23,10 @@ class Utils {
       return (Math.floor((size / 1024) * Math.pow(10, 1) ) / Math.pow(10, 1)).toString() + ' KB';
     } else if ( size >= (1024 * 1024) && size < (1024 * 1024 * 1024)) {
       return (Math.floor((size / 1024 / 1024) * Math.pow(10, 1) ) / Math.pow(10, 1)).toString() + ' MB';
+    } else if ( size >= (1024 * 1024 * 1024)) {
+      return (Math.floor((size / 1024 / 1024 / 1024) * Math.pow(10, 1) ) / Math.pow(10, 1)).toString() + ' GB';
+    } else {
+      return 'N/A'
     }
   }
 
