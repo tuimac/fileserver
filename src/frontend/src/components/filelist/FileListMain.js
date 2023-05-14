@@ -4,8 +4,13 @@ import "react-resizable/css/styles.css";
 import {
   Box,
   Button,
-  Grid
+  ButtonGroup,
+  Grid,
+  Menu,
+  MenuItem
 } from '@mui/material';
+
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
@@ -21,6 +26,10 @@ class FileListMain extends React.Component {
       items: { row: [], column: [], root_path: '' },
       path: [],
       check_list: {},
+      actions: {
+        open: false,
+        anchor: ''
+      },
       error: false
     };
     this.getFileInfo = this.getFileInfo.bind(this);
@@ -97,7 +106,19 @@ class FileListMain extends React.Component {
             </Box>
           </Grid>
           <Grid item>
-            <Button variant="contained" color="success" onClick={ (e) => this.uploadpreview.openPreview() }>File Upload</Button>
+            <ButtonGroup>
+              <Button variant="contained" color="success" onClick={ (e) => this.setState({ actions: { open: true, anchor: e.currentTarget }})}>Actions</Button>
+              <Button size="small" variant="contained" color="success" onClick={ (e) => this.setState({ actions: { open: true, anchor: e.currentTarget }})}>
+                <ArrowDropDownIcon />
+              </Button>
+            </ButtonGroup>
+            <Menu
+              open={ this.state.actions.open }
+              anchorEl={ this.state.actions.anchor }
+              onClose={ (e) => this.setState({ actions: { open: false }}) }
+            >
+              <MenuItem onClick={ (e) => this.uploadpreview.openPreview() }>Upload Files</MenuItem>
+            </Menu>
           </Grid>
         </Grid>
         

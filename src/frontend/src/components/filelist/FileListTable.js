@@ -57,7 +57,7 @@ class FileListTable extends React.Component {
       <>
         <FileListPreview path={ this.props.path } ref={ instance => { this.listpreview = instance } } />
         <TableContainer sx={{ maxHeight: window.innerHeight * 0.75 }}>
-          <Table stickyHeader aria-label="sticky table">
+          <Table stickyHeader aria-label="sticky table" size="small">
             <TableHead>
               <TableRow key='header'>
                 <StyledTableCell>
