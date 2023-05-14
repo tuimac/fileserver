@@ -1,10 +1,7 @@
-import json
 import logging
-import traceback
 import os
 import pwd
 import re
-from exceptions.default import ItemTypeError
 from backend.settings import CONFIG
 
 logger = logging.getLogger("django")
@@ -43,7 +40,6 @@ class Filelist:
         path = os.path.join(CONFIG['root_directory'], path)
         with os.scandir(path) as item_list:
             for item in item_list:
-                item_path = os.path.join(path, item)
                 if item.is_file():
                     size_info[item.name] = item.stat().st_size
                 elif item.is_dir():

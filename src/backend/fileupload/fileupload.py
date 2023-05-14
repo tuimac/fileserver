@@ -1,6 +1,4 @@
-import json
 import logging
-import traceback
 import os
 from backend.settings import CONFIG
 
