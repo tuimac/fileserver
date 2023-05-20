@@ -35,6 +35,5 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Coming up the next
 
-- Delete files or directory function.
 - Edit file funciton.
 - Display current directory function.

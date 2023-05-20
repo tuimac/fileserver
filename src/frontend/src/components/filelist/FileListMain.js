@@ -4,13 +4,13 @@ import "react-resizable/css/styles.css";
 import {
   Box,
   Button,
-  ButtonGroup,
   Grid,
   Menu,
   MenuItem
 } from '@mui/material';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
@@ -112,7 +112,7 @@ class FileListMain extends React.Component {
         <FileDeletePreview
           path={ this.state.path }
           forwardDirectory={ this.forwardDirectory }
-          closeActions={ this.closeActions }
+          closeActions={ this.closeActions } 
           getCheckList={ this.getCheckList }
           check_list={ this.state.check_list }
           open={ false }
@@ -124,17 +124,25 @@ class FileListMain extends React.Component {
             </Box>
           </Grid>
           <Grid item>
-            <ButtonGroup>
-              <Button
-                size="medium"
-                variant="outlined"
-                color="success"
-                onClick={ (e) => this.setState({ actions: { open: true, anchor: e.currentTarget }})}
-              >
-                Actions
-                <ArrowDropDownIcon />
-              </Button>
-            </ButtonGroup>
+            <Button
+              size="medium"
+              variant="outlined"
+              color="success"
+              onClick={ (e) => this.getFileInfo() }
+            >
+              <RefreshIcon />
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              size="medium"
+              variant="outlined"
+              color="success"
+              onClick={ (e) => this.setState({ actions: { open: true, anchor: e.currentTarget }})}
+            >
+              Actions
+              <ArrowDropDownIcon />
+            </Button>
             <Menu
               open={ this.state.actions.open }
               anchorEl={ this.state.actions.anchor }

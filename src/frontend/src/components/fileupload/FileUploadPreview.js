@@ -8,12 +8,14 @@ import {
   Dialog,
   DialogActions,
   DialogTitle,
-  DialogContent
+  DialogContent,
+  List,
+  ListItem,
+  ListItemText
 } from '@mui/material';
 
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
-import FileUploadList from './FileUploadList';
 import FileServerServices from '../../services/FileServerServices';
 
 class FileUploadPreview extends React.Component {
@@ -84,14 +86,18 @@ class FileUploadPreview extends React.Component {
                       </IconButton>
                     </Grid>
                     <Grid item> 
-                      <Typography variant="subtitle1" gutterBottom>Drag or Click here</Typography>
+                      <Typography variant="subtitle1" gutterBottom>Click here</Typography>
                     </Grid>
                   </Grid>
                 </Box>
               : <Box>
-                  { Object.keys(this.state.files).map((index) => (
-                    <FileUploadList key={ this.state.files[index].name } filename={ this.state.files[index].name }/>
-                  ))}
+                  <List key='upload_list'>
+                    { Object.keys(this.state.files).map((index) => (  
+                      <ListItem key={ this.state.files[index].name }>
+                        <ListItemText>{ this.state.files[index].name }</ListItemText>
+                      </ListItem>
+                    ))}
+                  </List>
                 </Box>
             }
             
