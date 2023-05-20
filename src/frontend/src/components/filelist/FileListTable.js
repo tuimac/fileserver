@@ -29,27 +29,34 @@ class FileListTable extends React.Component {
     };
     this.handleAllChecked = this.handleAllChecked.bind(this);
     this.handleChecked = this.handleChecked.bind(this);
+    this.getCheckList = this.getCheckList.bind(this);
   }
 
-  handleAllChecked(event) {
-    let tmp_check_list = [];
-    if(event.target.checked) { 
+  getCheckList() {
+    this.props.getCheckList(this.state.check_list);
+  }
+
+  handleAllChecked = async (event) => { 
+    if(event.target.checked) {
+      let tmp_check_list = [];
       this.props.items.row.forEach((item) => tmp_check_list.push(item.name));
+      await this.setState({ check_list: tmp_check_list });
+    } else {
+      await this.setState({ check_list: [] });
     }
-    this.setState({ check_list: tmp_check_list });
+    this.getCheckList();
   }
 
-  handleChecked(event, itemname) {
+  handleChecked = async (event, itemname) => {
     let tmp_check_list = this.state.check_list;
-    console.log(tmp_check_list);
     if(event.target.checked) {
       tmp_check_list.push(itemname);
-      this.setState({ check_list: tmp_check_list });
+      await this.setState({ check_list: tmp_check_list });
     } else {
       tmp_check_list.splice(tmp_check_list.indexOf(itemname), 1);
-      console.log(tmp_check_list);
-      this.setState({ check_list: tmp_check_list });
+      await this.setState({ check_list: tmp_check_list });
     }
+    this.getCheckList();
   }
 
   render() {

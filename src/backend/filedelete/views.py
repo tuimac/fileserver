@@ -15,11 +15,12 @@ class FileDeleteAPIViews(views.APIView):
     def post(self, request, *args, **kwargs):
         try:
             logger.info(request.data)
+            logger.info(type(request.data))
             if self.kwargs.get('path') == None:
                 logger.debug(self.kwargs.get('path'))
-                Filedelete.deletefiles('', request.data['filelist'])
+                Filedelete.deletefiles('', request.data)
             else:
-                Filedelete.deletefiles(self.kwargs.get('path'), request.data['filelist'])
+                Filedelete.deletefiles(self.kwargs.get('path'), request.data)
             return Response(
                 ReplyFormat.status_200('uploaded'),
                 status=status.HTTP_200_OK

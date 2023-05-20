@@ -39,6 +39,7 @@ class FileUploadPreview extends React.Component {
   closePreview = async () => {
     await this.setState({ files: [] });
     await this.setState({ open: false });
+    this.props.closeActions();
   }
 
   selectFiles(upload_file) {
@@ -51,7 +52,7 @@ class FileUploadPreview extends React.Component {
     for(let index in Object.keys(this.state.files)) {
       data.append(this.state.files[index].name, this.state.files[index]);
     }
-    await FileServerServices.uploadFile(this.props.path.join('/'), this.state.files, data);
+    await FileServerServices.uploadFile(this.props.path.join('/'), data);
     await this.props.forwardDirectory(this.props.path.join('/'));
     this.closePreview();
   }

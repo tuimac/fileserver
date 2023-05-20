@@ -49,11 +49,26 @@ class FileServerServices {
     });
   }
 
-  static uploadFile(path, filename, data) {
+  static uploadFile(path, data) {
     let url = API_URL + '/fileupload/' + path;
     axios.post(url, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
+      }
+    }).then((res) => 
+    {
+      return res.data.result;
+    })
+    .catch((error) => {
+      throw error;
+    });
+  }
+
+  static deleteFile(path, file_name_list) {
+    let url = API_URL + '/filedelete/' + path;
+    axios.post(url, file_name_list, {
+      headers: {
+        'Content-Type': 'application/json'
       }
     }).then((res) => 
     {
