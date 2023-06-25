@@ -49,13 +49,14 @@ class FileUploadPreview extends React.Component {
   }
 
   uploadFile = async (event) => {
+    console.log(this.props.path);
     event.preventDefault();
     let data = new FormData();
     for(let index in Object.keys(this.state.files)) {
       data.append(this.state.files[index].name, this.state.files[index]);
     }
     await FileServerServices.uploadFile(this.props.path.join('/'), data);
-    await this.props.forwardDirectory(this.props.path.join('/'));
+    await this.props.forwardDirectory('');
     this.closePreview();
   }
 
@@ -74,7 +75,7 @@ class FileUploadPreview extends React.Component {
             }
           }}
         >
-          <DialogTitle id='preview-title'>Upload</DialogTitle>
+          <DialogTitle id='preview-title'>Upload Files</DialogTitle>
           <DialogContent dividers>
             { this.state.files.length === 0
               ? <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>

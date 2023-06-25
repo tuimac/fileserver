@@ -40,7 +40,7 @@ class FileDeletePreview extends React.Component {
   deleteFile = async (event) => {
     event.preventDefault();
     await FileServerServices.deleteFile(this.props.path.join('/'), this.props.check_list);
-    await this.props.forwardDirectory(this.props.path.join('/'));
+    await this.props.forwardDirectory('');
     this.closePreview();
   }
 
