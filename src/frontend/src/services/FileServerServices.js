@@ -50,8 +50,8 @@ class FileServerServices {
   }
 
   static uploadFile(path, data) {
-    let url = API_URL + '/fileupload/' + path;
-    axios.post(url, data, {
+    let url = API_URL + '/fileupload/' + path + '/';
+    return axios.post(url, data, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
@@ -65,7 +65,7 @@ class FileServerServices {
   }
 
   static deleteFile(path, file_name_list) {
-    let url = API_URL + '/filedelete/' + path;
+    let url = API_URL + '/filedelete/' + path + '/';
     axios.post(url, file_name_list, {
       headers: {
         'Content-Type': 'application/json'
