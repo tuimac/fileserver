@@ -6,7 +6,9 @@ import {
   Button,
   Grid,
   Menu,
-  MenuItem
+  MenuItem,
+  Breadcrumbs,
+  Link
 } from '@mui/material';
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -121,7 +123,24 @@ class FileListMain extends React.Component {
         <Grid container direction='row' justifyContent='space-between' alignItems='center' sx={{ flexGrow: 1, pb: 2 }}>
           <Grid item>
             <Box>
-              Test
+              <Breadcrumbs>
+                <Link
+                  underline='hover'
+                  color='inherit'
+                  href={ FILELIST_PATH }
+                >
+                </Link>
+                { Object.keys(this.state.path).map((index) => (
+                  <Link
+                    underline='hover'
+                    color='inherit'
+                    href={ FILELIST_PATH + '/' + this.state.path.slice(0, parseInt(index) + 1).join('/') }
+                    key={ index }
+                  >
+                    { this.state.path[index] }
+                  </Link>
+                ))}
+              </Breadcrumbs>
             </Box>
           </Grid>
           <Grid item>
