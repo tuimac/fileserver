@@ -121,36 +121,41 @@ class FileListMain extends React.Component {
         <Grid container direction='row' justifyContent='space-between' alignItems='center' sx={{ flexGrow: 1, pb: 2 }}>
           <Grid item>
             <Box>
+              Test
             </Box>
           </Grid>
           <Grid item>
-            <Button
-              size="medium"
-              variant="outlined"
-              color="success"
-              onClick={ (e) => this.getFileInfo() }
-            >
-              <RefreshIcon />
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              size="medium"
-              variant="outlined"
-              color="success"
-              onClick={ (e) => this.setState({ actions: { open: true, anchor: e.currentTarget }})}
-            >
-              Actions
-              <ArrowDropDownIcon />
-            </Button>
-            <Menu
-              open={ this.state.actions.open }
-              anchorEl={ this.state.actions.anchor }
-              onClose={ (e) => this.setState({ actions: { open: false }}) }
-            >
-              <MenuItem onClick={ (e) => this.uploadpreview.openPreview() }>Upload Files</MenuItem>
-              <MenuItem onClick={ (e) => this.state.check_list.length > 0 ? this.deletepreview.openPreview() : '' }>Delete Files</MenuItem>
-            </Menu>
+            <Grid container direction='row' justifyContent='flex-end' alignItems='center' spacing={3} sx={{ flexGrow: 1, pb: 2 }}>
+              <Grid item>
+                <Button
+                  size="medium"
+                  variant="outlined"
+                  color="success"
+                  onClick={ (e) => this.getFileInfo() }
+                >
+                  <RefreshIcon />
+                </Button>
+              </Grid>
+              <Grid item>
+                <Button
+                  size="medium"
+                  variant="outlined"
+                  color="success"
+                  onClick={ (e) => this.setState({ actions: { open: true, anchor: e.currentTarget }})}
+                >
+                  Actions
+                  <ArrowDropDownIcon />
+                </Button>
+                <Menu
+                  open={ this.state.actions.open }
+                  anchorEl={ this.state.actions.anchor }
+                  onClose={ (e) => this.setState({ actions: { open: false }}) }
+                >
+                  <MenuItem onClick={ (e) => this.uploadpreview.openPreview() }>Upload Files</MenuItem>
+                  <MenuItem onClick={ (e) => this.state.check_list.length > 0 ? this.deletepreview.openPreview() : '' }>Delete Files</MenuItem>
+                </Menu>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         
