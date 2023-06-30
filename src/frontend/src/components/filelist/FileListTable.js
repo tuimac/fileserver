@@ -67,13 +67,13 @@ class FileListTable extends React.Component {
           <Table stickyHeader aria-label="sticky table" size="small">
             <TableHead>
               <TableRow key='header'>
-                <StyledTableCell>
+                <StyledTableCell align='center' style={{ width: '5%' }}>
                   <Checkbox
                     onChange={ (e) => this.handleAllChecked(e) }
                   />
                 </StyledTableCell>
                 { Object.keys(this.state.column).map((index) => (
-                  <StyledTableCell align='center' key={ this.state.column[index] }>{ this.state.column[index] }</StyledTableCell>
+                  <StyledTableCell align='center' key={ this.state.column[index] } style={{ width: '23%' }}>{ this.state.column[index] }</StyledTableCell>
                 ))}
               </TableRow>
             </TableHead>
@@ -92,7 +92,7 @@ class FileListTable extends React.Component {
               { Object.keys(this.props.items.row).map((row) => (
                 this.props.items.row[row].type === 'directory'
                 ? <TableRow hover key={ this.props.items.row[row].name }>
-                    <StyledTableCell>
+                    <StyledTableCell align='center'>
                       <Checkbox
                         checked={ this.state.check_list.indexOf(this.props.items.row[row].name) !== -1 }
                         onChange={ (e) => this.handleChecked(e, this.props.items.row[row].name) }
@@ -107,7 +107,7 @@ class FileListTable extends React.Component {
                     ))}
                   </TableRow>
                 : <TableRow hover key={ this.props.items.row[row].name }>
-                    <StyledTableCell>
+                    <StyledTableCell align='center'>
                       <Checkbox
                         checked={ this.state.check_list.indexOf(this.props.items.row[row].name) !== -1 }
                         onChange={ (e) => this.handleChecked(e, this.props.items.row[row].name) }

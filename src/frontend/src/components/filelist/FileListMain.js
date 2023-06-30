@@ -129,6 +129,7 @@ class FileListMain extends React.Component {
                   color='inherit'
                   href={ FILELIST_PATH }
                 >
+                  { this.state.items.root_path }
                 </Link>
                 { Object.keys(this.state.path).map((index) => (
                   <Link
