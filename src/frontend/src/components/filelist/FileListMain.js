@@ -13,6 +13,7 @@ import {
 
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import HomeIcon from '@mui/icons-material/Home';
 
 import FileServerServices from '../../services/FileServerServices';
 import Utils from '../../utils/Utils';
@@ -43,8 +44,9 @@ class FileListMain extends React.Component {
     this.backwardDirectory = this.backwardDirectory.bind(this);
   }
 
-  async componentDidMount() {
-    await this.getFileInfo();
+  componentDidMount() {
+    this.getFileInfo().then();
+    console.log(this.state.items);
   }
 
   componentDidUpdate(prevProps) {
@@ -56,8 +58,7 @@ class FileListMain extends React.Component {
   getFileInfo = async () => {
     try {
       await this.setState({ path: Utils.sanitize_url(window.location.pathname.replace(FILELIST_PATH, '').split('/')) });
-      await this.setState({ items: await FileServerServices.getFileList(this.state.path.join('/')) });
-      this.getFileSize();
+      await this.setState({ items: await FileServerServices.getFileList(this.state.path.join('/')) }, () => this.getFileSize());
     } catch(error) {
       console.log(error);
       this.setState({ error: true });
@@ -74,7 +75,7 @@ class FileListMain extends React.Component {
       tmp_item.size = Utils.size_unit(file_size[file_name]);
       tmp_items[tmp_item_index] = tmp_item;
     }
-    this.setState({ items: { row : tmp_items }});
+    await this.setState({ items: { row : tmp_items }}, console.log(this.state.items));
   }
 
   getCheckList(check_list) {
@@ -129,7 +130,7 @@ class FileListMain extends React.Component {
                   color='inherit'
                   href={ FILELIST_PATH }
                 >
-                  { this.state.items.root_path }
+                  <HomeIcon />
                 </Link>
                 { Object.keys(this.state.path).map((index) => (
                   <Link
