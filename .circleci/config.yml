@@ -45,7 +45,7 @@ jobs:
             for i in {0..20}; do
               STATUS_CODE=$(curl -LI http://localhost -o /dev/null -w '%{http_code}\n' -s)
               echo $STATUS_CODE
-              [[ $STATUS_CODE == '200' ]] && exit 0 
+              [[ $STATUS_CODE == '200' ]] && exit 0
               sleep 3
             done
             exit 1
@@ -90,7 +90,6 @@ jobs:
           working_directory: docker/prod
           command: docker buildx build --push --platform linux/ppc64le,linux/s390x,linux/arm64,linux/amd64 -t ${IMAGE_NAME} .
 workflows:
-  version: 2.1
   pipeline:
     jobs:
       - build
