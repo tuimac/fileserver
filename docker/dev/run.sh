@@ -7,7 +7,7 @@ function runContainer(){
     docker run -itd --name ${NAME} \
             -h ${NAME} \
             -v $(pwd)/${NAME}:/${NAME} \
-            -p 8080:80 \
+            -p 8000:80 \
             ${NAME}
 }
 
