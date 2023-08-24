@@ -6,6 +6,7 @@ function runContainer(){
     docker build -t ${NAME} . --no-cache
     docker run -itd --name ${NAME} \
             -h ${NAME} \
+            --restart always \
             -v $(pwd)/${NAME}:/${NAME} \
             -p 8000:80 \
             ${NAME}
